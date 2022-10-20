@@ -11,8 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Migraine App',
-      home: SignUpPage(),
+      home: WelcomePage(), // Initial page upon launch
     );
   }
 }
@@ -22,7 +21,9 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Top Level Container
     return Container(
+      // Background Gradient Decoration
       decoration: const BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -33,6 +34,8 @@ class WelcomePage extends StatelessWidget {
             Color.fromARGB(255, 101, 120, 78),
             Color.fromARGB(255, 109, 144, 67)
           ])),
+
+      // Structural Container for Widgets
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
@@ -50,10 +53,18 @@ class WelcomePage extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 16, color: Color.fromARGB(255, 255, 255, 255)),
               ),
+
+              // Sign Up Button
               Container(
                   margin: const EdgeInsets.only(top: 325),
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpPage()),
+                      );
+                    },
                     style: TextButton.styleFrom(
                       side: const BorderSide(
                           width: 1, color: Color.fromARGB(255, 255, 255, 255)),
@@ -66,10 +77,18 @@ class WelcomePage extends StatelessWidget {
                           color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                   )),
+
+              // Sign In Button
               Container(
                   margin: const EdgeInsets.only(top: 50),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignInPage()),
+                      );
+                    },
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
@@ -94,6 +113,7 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // Background Gradient Decoration
       decoration: const BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -104,6 +124,8 @@ class SignInPage extends StatelessWidget {
             Color.fromARGB(255, 101, 120, 78),
             Color.fromARGB(255, 109, 144, 67)
           ])),
+
+      // Structural Container for Widgets
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
@@ -111,16 +133,24 @@ class SignInPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                tooltip: 'Back',
-                onPressed: () {},
+              // Back Arrow Button
+              Transform.translate(
+                offset: const Offset(-20, 0),
+                child: IconButton(
+                  color: const Color.fromARGB(255, 101, 101, 101),
+                  icon: const Icon(Icons.arrow_back_ios),
+                  tooltip: 'Back',
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
               const Text(
                 'Sign In',
                 style: TextStyle(
                     fontSize: 50, color: Color.fromARGB(255, 255, 255, 255)),
               ),
+              // Username Field Form
               Container(
                   margin: const EdgeInsets.only(top: 50),
                   child: TextFormField(
@@ -131,6 +161,7 @@ class SignInPage extends StatelessWidget {
                       labelText: 'Username',
                     ),
                   )),
+              // Password Field Form
               Container(
                   margin: const EdgeInsets.only(top: 40),
                   child: TextFormField(
@@ -141,6 +172,7 @@ class SignInPage extends StatelessWidget {
                       labelText: 'Password',
                     ),
                   )),
+              // Continue Button
               Container(
                   margin: const EdgeInsets.only(top: 70),
                   child: OutlinedButton(
@@ -157,6 +189,7 @@ class SignInPage extends StatelessWidget {
                           color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                   )),
+              // Sign In With Google Button
               Container(
                   margin: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
@@ -172,10 +205,17 @@ class SignInPage extends StatelessWidget {
                           color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                   )),
+              // Create New Account Button
               Container(
                   margin: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpPage()),
+                      );
+                    },
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
@@ -200,6 +240,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // Background Gradient Decoration
       decoration: const BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -210,6 +251,8 @@ class SignUpPage extends StatelessWidget {
             Color.fromARGB(255, 101, 120, 78),
             Color.fromARGB(255, 109, 144, 67)
           ])),
+
+      // Structural Container for Widgets
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
@@ -217,38 +260,59 @@ class SignUpPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                tooltip: 'Back',
-                onPressed: () {},
+              // Back Arrow Button
+              Transform.translate(
+                offset: const Offset(-20, 0),
+                child: IconButton(
+                  color: const Color.fromARGB(255, 101, 101, 101),
+                  icon: const Icon(Icons.arrow_back_ios),
+                  tooltip: 'Back',
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
               const Text(
                 'Sign Up',
                 style: TextStyle(
                     fontSize: 50, color: Color.fromARGB(255, 255, 255, 255)),
               ),
+
+              // Container for same line Text Field
               Container(
-                  margin: const EdgeInsets.only(top: 50),
+                  margin: const EdgeInsets.only(top: 40),
                   child: Row(children: <Widget>[
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelStyle: TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255)),
-                        labelText: 'First Name',
+                    Flexible(
+                      flex: 0,
+                      // First Name Form Field
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          constraints: BoxConstraints(maxWidth: 150),
+                          labelStyle: TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255)),
+                          labelText: 'First Name',
+                        ),
                       ),
                     ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelStyle: TextStyle(
-                            color: Color.fromARGB(255, 255, 255, 255)),
-                        labelText: 'Last Name',
+                    const Spacer(),
+                    Flexible(
+                      flex: 10,
+                      // Last Name Form Field
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelStyle: TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255)),
+                          labelText: 'Last Name',
+                        ),
                       ),
                     ),
+                    const Spacer()
                   ])),
+              // Username Form Field
               Container(
-                  margin: const EdgeInsets.only(top: 50),
+                  margin: const EdgeInsets.only(top: 25),
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
@@ -257,8 +321,9 @@ class SignUpPage extends StatelessWidget {
                       labelText: 'Username',
                     ),
                   )),
+              // Password Form Field
               Container(
-                  margin: const EdgeInsets.only(top: 40),
+                  margin: const EdgeInsets.only(top: 25),
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
@@ -267,8 +332,9 @@ class SignUpPage extends StatelessWidget {
                       labelText: 'Password',
                     ),
                   )),
+              // Continue Button
               Container(
-                  margin: const EdgeInsets.only(top: 70),
+                  margin: const EdgeInsets.only(top: 40),
                   child: OutlinedButton(
                     onPressed: () {},
                     style: TextButton.styleFrom(
@@ -283,6 +349,7 @@ class SignUpPage extends StatelessWidget {
                           color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                   )),
+              // Sign-in with Google button
               Container(
                   margin: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
@@ -298,16 +365,23 @@ class SignUpPage extends StatelessWidget {
                           color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                   )),
+              // Sign In button
               Container(
                   margin: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignInPage()),
+                      );
+                    },
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
                             const Color.fromARGB(255, 255, 255, 255)),
                     child: const Text(
-                      "Create New Account",
+                      "Sign In",
                       style: TextStyle(
                           fontSize: 17, color: Color.fromARGB(255, 0, 0, 0)),
                     ),
