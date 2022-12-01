@@ -31,7 +31,7 @@ Future<String> signUpGoogle(String first, String last) async {
     user.set("lastName", last);
     var response = await user.signUp();
     if (response.success) {
-      return "Success signing up with Google";
+      return "Success!";
     } else {
       return response.error!.message;
     }
