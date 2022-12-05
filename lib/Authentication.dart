@@ -1,6 +1,5 @@
-import 'dart:convert';
+// ignore_for_file: file_names
 
-import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -17,7 +16,7 @@ Future<String> registerUserByEmail(String username, String email, String pass,
   }
 }
 
-Future<String> signUpGoogle(String first, String last) async {
+Future<String> registerUserByGoogle(String first, String last) async {
   final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
   try {
     await googleSignIn.signIn();

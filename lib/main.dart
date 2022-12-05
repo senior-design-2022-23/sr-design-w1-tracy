@@ -186,6 +186,7 @@ class SignInPage extends StatelessWidget {
                           TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                       labelText: 'Password',
                     ),
+                    obscureText: true,
                   )),
               // Continue Button
               Container(
@@ -354,6 +355,7 @@ class SignUpPage extends StatelessWidget {
                           TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                       labelText: 'Password',
                     ),
+                    obscureText: true,
                   )),
               // Continue Button
               Container(
@@ -389,7 +391,7 @@ class SignUpPage extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
                     onPressed: () async {
-                      String message = await signUpGoogle(
+                      String message = await registerUserByGoogle(
                           controllerFirstName.text.trim(),
                           controllerLastName.text.trim());
                       print(message);
