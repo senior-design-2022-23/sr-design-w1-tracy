@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/AuthenticationUI.dart';
+import 'package:migraine_aid/PersonalInformationUI.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,11 +9,13 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: WelcomePage(), // Initial page upon launch
+    return MaterialApp(
+      // Pass in prerequisite data to PIPage widget
+      home:
+          // WelcomePage(),
+          PersonalInformationPage(name: "Mary Jenkins"),
     );
   }
 }
