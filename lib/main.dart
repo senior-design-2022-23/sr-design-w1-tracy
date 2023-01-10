@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/Authentication.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 void main() async {
@@ -6,17 +7,15 @@ void main() async {
   final keyApplicationId = 'HZzudajLjqIOuUlTKJekdUyC3GKt5MzrBls7gJGZ';
   final keyClientKey = 'GYMIP6tfliC7C4s2HpUouH1MQkffo6WvXCnDu7uQ';
   final keyParseServerUrl = 'https://parseapi.back4app.com';
-
   await Parse().initialize(keyApplicationId, keyParseServerUrl,
       clientKey: keyClientKey, autoSendSessionId: true);
 
-  var firstObject = ParseObject('FirstClass')
-    ..set(
-        'message', 'Hey ! First message from Flutter. Parse is now connected');
-  await firstObject.save();
+  // var firstObject = ParseObject('FirstClass')
+  //   ..set(
+  //       'message', 'Hey ! First message from Flutter. Parse is now connected');
+  // await firstObject.save();
 
-  print('done');
-
+  // print('done');
   runApp(const MyApp());
 }
 
@@ -187,6 +186,7 @@ class SignInPage extends StatelessWidget {
                           TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                       labelText: 'Password',
                     ),
+                    obscureText: true,
                   )),
               // Continue Button
               Container(
@@ -255,6 +255,10 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controllerFirstName = TextEditingController();
+    final controllerLastName = TextEditingController();
+    final controllerUsername = TextEditingController();
+    final controllerPassword = TextEditingController();
     return Container(
       // Background Gradient Decoration
       decoration: const BoxDecoration(
@@ -302,6 +306,7 @@ class SignUpPage extends StatelessWidget {
                       flex: 0,
                       // First Name Form Field
                       child: TextFormField(
+                        controller: controllerFirstName,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           constraints: BoxConstraints(maxWidth: 150),
@@ -316,6 +321,7 @@ class SignUpPage extends StatelessWidget {
                       flex: 10,
                       // Last Name Form Field
                       child: TextFormField(
+                        controller: controllerLastName,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelStyle: TextStyle(
@@ -330,29 +336,44 @@ class SignUpPage extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 25),
                   child: TextFormField(
+                    controller: controllerUsername,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelStyle:
                           TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                      labelText: 'Username',
+                      labelText: 'Email',
                     ),
                   )),
               // Password Form Field
               Container(
                   margin: const EdgeInsets.only(top: 25),
                   child: TextFormField(
+                    controller: controllerPassword,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelStyle:
                           TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                       labelText: 'Password',
                     ),
+                    obscureText: true,
                   )),
               // Continue Button
               Container(
                   margin: const EdgeInsets.only(top: 40),
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      String message = await registerUserByEmail(
+                          controllerUsername.text.trim(),
+                          controllerUsername.text.trim(),
+                          controllerPassword.text.trim(),
+                          controllerFirstName.text.trim(),
+                          controllerLastName.text.trim());
+                      if (message == "Success!") {
+                        //do success
+                      } else {
+                        //do something with message (maybe showError(message))
+                      }
+                    },
                     style: TextButton.styleFrom(
                       side: const BorderSide(
                           width: 1, color: Color.fromARGB(255, 255, 255, 255)),
@@ -369,7 +390,12 @@ class SignUpPage extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      String message = await registerUserByGoogle(
+                          controllerFirstName.text.trim(),
+                          controllerLastName.text.trim());
+                      print(message);
+                    },
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
