@@ -2,7 +2,6 @@
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple'
 
 Future<String> registerUserByEmail(String username, String email, String pass,
     String first, String last) async {
