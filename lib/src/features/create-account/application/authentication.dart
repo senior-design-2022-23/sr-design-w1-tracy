@@ -2,6 +2,7 @@
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple'
 
 Future<String> registerUserByEmail(String username, String email, String pass,
     String first, String last) async {
@@ -37,3 +38,8 @@ Future<String> registerUserByGoogle(String first, String last) async {
   }
   return "Unable to sign up with Google.";
 }
+
+// Future<String> registerUserThroughApple(String first, String last) async {
+//   return "Unable to sign up with Apple. Please try again later or sign up using"
+//       "a different method.";
+// }
