@@ -30,6 +30,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   parse_server_sdk_flutter: ^3.1.0
+  carousel_slider: ^4.2.1
   flutter:
     sdk: flutter
     
