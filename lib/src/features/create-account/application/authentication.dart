@@ -37,3 +37,8 @@ Future<String> registerUserByGoogle(String first, String last) async {
   }
   return "Unable to sign up with Google.";
 }
+
+// Future<String> registerUserThroughApple(String first, String last) async {
+//   return "Unable to sign up with Apple. Please try again later or sign up using"
+//       "a different method.";
+// }
