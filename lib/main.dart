@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SleepPage(), // Initial page upon launch
+      home: WelcomePage(), // Initial page upon launch
     );
   }
 }
