@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: DietPage(), // Initial page upon launch
+      home: SleepPage(), // Initial page upon launch
     );
   }
 }

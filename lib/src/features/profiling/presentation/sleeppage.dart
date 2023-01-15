@@ -46,6 +46,24 @@ class SleepPage extends StatelessWidget {
                       color: Colors.white),
                     )),
                 )).toList()
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  onPressed: () {
+                    ccontroller.previousPage();
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: () {
+                    ccontroller.nextPage();
+                  },
+                  icon: const Icon(Icons.arrow_forward_ios_rounded),
+                ),
               )
             ],
           )
