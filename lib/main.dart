@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/sleeppage.dart';
-// import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart'; // Here for testing one page at a time
+import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart'; // Here for testing one page at a time
 import 'package:migraine_aid/src/shared/welcome.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SleepPage(), // Initial page upon launch
+      home: WelcomePage(), // Initial page upon launch
     );
   }
 }

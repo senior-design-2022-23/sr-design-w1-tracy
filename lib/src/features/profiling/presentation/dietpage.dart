@@ -1,6 +1,7 @@
 import 'dart:js';
 
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/sleeppage.dart';
 
 
 class DietPage extends StatelessWidget {
@@ -20,6 +21,7 @@ class DietPage extends StatelessWidget {
             Color.fromARGB(255, 109, 144, 67)
           ])),
 
+
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container (
@@ -32,23 +34,68 @@ class DietPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
                 ),
+              const SizedBox(height: 30),
               Container(
                   padding: const EdgeInsets.all(15),
                   child: ButtonBar(
                     mainAxisSize: MainAxisSize.min,
                     alignment: MainAxisAlignment.spaceBetween,
-                      buttonPadding: EdgeInsets.all(2),
+                    buttonPadding: const EdgeInsets.all(2),
                     children: <Widget> [
-                      _dietChoice("SAD - Standard American Diet", context),
-                      _dietChoice("AFD - Asian Food Diet", context),
-                      _dietChoice("FFD - Fast Food Diet", context),
-                      _dietChoice("Pescatarian / Mediterranean Diet", context),
-                      _dietChoice("Gluten Free Diet", context),
-                      _dietChoice("Vegetarian Diet", context),
-                      _dietChoice("Vegan Diet", context),
-                      _dietChoice("Paleo Diet", context)
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: _dietChoice("SAD - Standard American Diet", context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: _dietChoice("AFD - Asian Food Diet", context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: _dietChoice("FFD - Fast Food Diet", context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: _dietChoice("Pescatarian / Mediterranean Diet", context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: _dietChoice("Gluten Free Diet", context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: _dietChoice("Vegetarian Diet", context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: _dietChoice("Vegan Diet", context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: _dietChoice("Paleo Diet", context),
+                      ),
                     ]
-                  ))
+                  )),
+              Align(
+                  alignment: FractionalOffset.bottomCenter,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SleepPage()));
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      minimumSize: const Size(200, 50),
+                    ),
+                    child: const Text(
+                      "CONTINUE",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    )
+
+                  )
+              )
             ]
           )
         )
@@ -65,7 +112,7 @@ class DietPage extends StatelessWidget {
         style: TextButton.styleFrom(
           side: const BorderSide(width: 1, color: Color.fromARGB(255, 255, 255, 255)),
           backgroundColor: const Color.fromARGB(255, 8, 8, 8),
-          minimumSize: const Size(200, 50),
+          minimumSize: const Size(300, 60),
         ),
         child: Text(
           option,
