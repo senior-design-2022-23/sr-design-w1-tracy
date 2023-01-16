@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../create-account/presentation/signup.dart';
+import '../application/login_authentication.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userController = TextEditingController();
+    final passwordController = TextEditingController();
     return Container(
       // Background Gradient Decoration
       decoration: const BoxDecoration(
@@ -49,6 +52,7 @@ class SignInPage extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 50),
                   child: TextFormField(
+                    controller: userController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelStyle:
@@ -60,6 +64,7 @@ class SignInPage extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 40),
                   child: TextFormField(
+                    controller: passwordController,
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelStyle:
@@ -72,7 +77,11 @@ class SignInPage extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 70),
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                        await doUserLogin(
+                        userController.text.trim(),
+                        passwordController.text.trim());
+                  },
                     style: TextButton.styleFrom(
                       side: const BorderSide(
                           width: 1, color: Color.fromARGB(255, 255, 255, 255)),
