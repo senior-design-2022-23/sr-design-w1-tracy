@@ -77,6 +77,19 @@ class _SleepPageState extends State<SleepPage>{
                         _sleepNumber("10"),
                       ],
                     )),
+              ),
+              OutlinedButton(
+                  onPressed: () => {
+                  },
+                  child:
+                  const Text(
+                      "CONTINUE",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      )
+                  )
               )
             ]
         )
