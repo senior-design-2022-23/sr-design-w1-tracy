@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/features/profiling/application/activitypage_backend.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage ({Key? key}) : super(key: key);
@@ -108,7 +109,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       margin: const EdgeInsets.only(top: 70),
                       child: OutlinedButton(
                         onPressed:  () async {
-
+                            storeActivity(gymDropDownValue, waterDropDownValue);
                         },
                         style: TextButton.styleFrom(
                           side: const BorderSide(
