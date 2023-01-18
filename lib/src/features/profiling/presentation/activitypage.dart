@@ -109,7 +109,11 @@ class _ActivityPageState extends State<ActivityPage> {
                       margin: const EdgeInsets.only(top: 70),
                       child: OutlinedButton(
                         onPressed:  () async {
-                            storeActivity(gymDropDownValue, waterDropDownValue);
+                            bool stored = await storeActivity(gymDropDownValue, waterDropDownValue);
+                            print(stored);
+                            if(!stored) {
+                                //TODO: ERROR HANDLING
+                            }
                         },
                         style: TextButton.styleFrom(
                           side: const BorderSide(
