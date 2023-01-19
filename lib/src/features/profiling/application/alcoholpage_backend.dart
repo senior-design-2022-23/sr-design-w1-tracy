@@ -2,7 +2,7 @@ import 'package:migraine_aid/src/features/login/application/login_authentication
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../../shared/userFunctions.dart';
 
-Future<bool> storeAlcohol(alcWeek, alcDay) async {
+Future<bool> storeAlcohol(daysDrank, alcDay) async {
   //TODO: remove next line when pages linked.
   await doUserLogin('kbhuwalk@gmail.com', 'Kush1234');
   ParseUser? user = await getCurrentUser();
@@ -14,7 +14,7 @@ Future<bool> storeAlcohol(alcWeek, alcDay) async {
   final ParseResponse parseResponse = await queryUsers.query();
   if (parseResponse.success && parseResponse.results != null) {
     var obj = (parseResponse.results!.first) as ParseObject;
-    obj..set('AlcoholPerWeek', alcWeek)
+    obj..set('DaysDrank', daysDrank)
       ..set('AlcoholOnDay', alcDay);
     await obj.save();
     return true;
