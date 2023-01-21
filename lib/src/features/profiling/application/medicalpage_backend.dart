@@ -2,6 +2,8 @@ import 'package:migraine_aid/src/features/login/application/login_authentication
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import '../../../shared/userFunctions.dart';
 
+//TODO: NEEDS CONNECTED TO FRONTEND PAGE
+
 Future<bool> storeMedicalHistory(medText) async {
   //TODO: remove next line when pages linked.
   await doUserLogin('kbhuwalk@gmail.com', 'Kush1234');
