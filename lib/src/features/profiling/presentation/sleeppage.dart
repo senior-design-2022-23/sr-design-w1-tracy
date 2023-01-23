@@ -8,33 +8,18 @@ class SleepPage extends StatefulWidget {
 
 }
 
-class _SleepPageState extends State<SleepPage>{
+class _SleepPageState extends State<SleepPage> {
+  int value = 0;
 
-  Color getForegroundColor(Set<MaterialState> states) {
-    const interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-    };
-
-    if (states.any(interactiveStates.contains)) {
-      return Colors.blue;
-    } else if (states.contains(MaterialState.focused)) {
-      return Colors.green;
-    } else {
-      return Colors.white;
-    }
+  @override
+  void initState() {
+    super.initState();
+    value = 0;
   }
 
-  Color getBackgroundColor(Set<MaterialState> states) {
-    if (states.contains(MaterialState.focused)) return Colors.black;
-    if (states.contains(MaterialState.pressed)) return Colors.green;
-
-    return Colors.grey;
-  }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -46,7 +31,10 @@ class _SleepPageState extends State<SleepPage>{
                   Color.fromARGB(255, 101, 120, 78),
                   Color.fromARGB(255, 109, 144, 67)
                 ])),
-        child: Column(
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const Text(
                 "About how many hours a night do you generally sleep?",
@@ -55,31 +43,56 @@ class _SleepPageState extends State<SleepPage>{
                     color: Colors.white
                 ),
               ),
-              Container(
-                alignment: Alignment.topCenter,
-                child: Container(
-                    height: 60,
-                    padding: const EdgeInsets.all(3.5),
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.9,
-                    child: Row(
-                      children: <Widget>[
-                        _sleepNumber("2"),
-                        _sleepNumber("3"),
-                        _sleepNumber("4"),
-                        _sleepNumber("5"),
-                        _sleepNumber("6"),
-                        _sleepNumber("7"),
-                        _sleepNumber("8"),
-                        _sleepNumber("9"),
-                        _sleepNumber("10"),
-                      ],
-                    )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget> [
+                  Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios),
+                      tooltip: '-1',
+                      onPressed: () {
+                        setState(() {
+                          if(value > 3) {
+                            value -= 1;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  Text(
+                      '$value',
+                       style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      )
+                  ),
+                  Material(
+                    color:  Colors.transparent,
+                    child: IconButton(
+                      icon: const Icon(
+                          Icons.arrow_forward_ios_outlined
+                      ),
+                      tooltip: '+1',
+                      onPressed: () {
+                        setState(() {
+                          if(value < 16) {
+                            value += 1;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+
+                ],
               ),
+              // continue button
               OutlinedButton(
-                  onPressed: () => {
+                  onPressed: () =>
+                  {
+                    // TODO: backend
                   },
                   child:
                   const Text(
@@ -91,36 +104,10 @@ class _SleepPageState extends State<SleepPage>{
                       )
                   )
               )
-            ]
+            ],
+
         )
-    );
-  }
-
-  Expanded _sleepNumber(String hour) {
-
-    final foregroundColor = MaterialStateProperty.resolveWith<Color>(getForegroundColor);
-    final backgroundColor = MaterialStateProperty.resolveWith<Color>(getBackgroundColor);
-
-    final style = ButtonStyle(
-      foregroundColor: foregroundColor,
-      backgroundColor: backgroundColor,
-    );
-
-    return Expanded(
-        child: OutlinedButton (
-          style: style,
-          onPressed: () => {
-          },
-          child: Text(
-              hour,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              )
-          ),
-        )
+    )
     );
   }
 }
-
