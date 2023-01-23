@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/features/profiling/application/sleeppage_backend.dart';
 
 class SleepPage extends StatefulWidget {
   const SleepPage({Key? key,}) : super(key: key);
@@ -90,9 +91,12 @@ class _SleepPageState extends State<SleepPage> {
               ),
               // continue button
               OutlinedButton(
-                  onPressed: () =>
-                  {
-                    // TODO: backend
+                  onPressed: ()
+                  async {
+                    bool stored = await storeSleepHours(value);
+                    if(!stored) {
+                      // TODO: Error handling
+                    }
                   },
                   child:
                   const Text(
