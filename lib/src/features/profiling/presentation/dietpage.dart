@@ -61,7 +61,11 @@ class DietPage extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => const DietPage())); // TODO),);
-        await storeDiet(option);
+        bool stored = await storeDiet(option);
+        if(!stored) {
+          //TODO: ERROR HANDLING
+        }
+
       },
       style: TextButton.styleFrom(
         side: const BorderSide(

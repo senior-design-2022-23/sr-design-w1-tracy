@@ -15,7 +15,7 @@ Future<bool> storeDiet(dietOption) async {
   final ParseResponse parseResponse = await queryUsers.query();
   if (parseResponse.success && parseResponse.results != null) {
     var obj = (parseResponse.results!.first) as ParseObject;
-    obj.set('DietOption', dietOption);
+    obj.set('DietInfo', dietOption);
     await obj.save();
     return true;
   }
