@@ -42,5 +42,5 @@ Future<String> loginWithGoogle(String first, String last) async {
     await doUserLogin(
         googleSignIn.currentUser?.displayName, googleSignIn.currentUser?.id);
   }
-  return "Unable to sign up with Google.";
+  return "Unable to sign in with Google.";
 }
