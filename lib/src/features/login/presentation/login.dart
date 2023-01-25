@@ -17,11 +17,11 @@ class SignInPage extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromARGB(255, 124, 154, 88),
-                Color.fromARGB(255, 141, 184, 86),
-                Color.fromARGB(255, 101, 120, 78),
-                Color.fromARGB(255, 109, 144, 67)
-              ])),
+            Color.fromARGB(255, 124, 154, 88),
+            Color.fromARGB(255, 141, 184, 86),
+            Color.fromARGB(255, 101, 120, 78),
+            Color.fromARGB(255, 109, 144, 67)
+          ])),
 
       // Structural Container for Widgets
       child: Scaffold(
@@ -56,7 +56,7 @@ class SignInPage extends StatelessWidget {
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelStyle:
-                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                       labelText: 'Username',
                     ),
                   )),
@@ -68,7 +68,7 @@ class SignInPage extends StatelessWidget {
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelStyle:
-                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                       labelText: 'Password',
                     ),
                     obscureText: true,
@@ -78,10 +78,9 @@ class SignInPage extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 70),
                   child: OutlinedButton(
                     onPressed: () async {
-                        await doUserLogin(
-                        userController.text.trim(),
-                        passwordController.text.trim());
-                  },
+                      await doUserLogin(userController.text.trim(),
+                          passwordController.text.trim());
+                    },
                     style: TextButton.styleFrom(
                       side: const BorderSide(
                           width: 1, color: Color.fromARGB(255, 255, 255, 255)),
@@ -98,11 +97,13 @@ class SignInPage extends StatelessWidget {
               Container(
                   margin: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      loginWithGoogle();
+                    },
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
-                        const Color.fromARGB(255, 223, 80, 80)),
+                            const Color.fromARGB(255, 223, 80, 80)),
                     child: const Text(
                       "Sign In With Google",
                       style: TextStyle(
@@ -124,7 +125,7 @@ class SignInPage extends StatelessWidget {
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
-                        const Color.fromARGB(255, 255, 255, 255)),
+                            const Color.fromARGB(255, 255, 255, 255)),
                     child: const Text(
                       "Create New Account",
                       style: TextStyle(
