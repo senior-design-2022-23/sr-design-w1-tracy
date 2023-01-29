@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/shared/userFunctions.dart';
 
 import '../features/create-account/presentation/signup.dart';
 import '../features/login/presentation/login.dart';
@@ -16,11 +17,11 @@ class WelcomePage extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromARGB(255, 124, 154, 88),
-                Color.fromARGB(255, 141, 184, 86),
-                Color.fromARGB(255, 101, 120, 78),
-                Color.fromARGB(255, 109, 144, 67)
-              ])),
+            Color.fromARGB(255, 124, 154, 88),
+            Color.fromARGB(255, 141, 184, 86),
+            Color.fromARGB(255, 101, 120, 78),
+            Color.fromARGB(255, 109, 144, 67)
+          ])),
 
       // Structural Container for Widgets
       child: Scaffold(
@@ -46,11 +47,7 @@ class WelcomePage extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 325),
                   child: OutlinedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignUpPage()),
-                      );
+                      goToPage(context, const SignUpPage());
                     },
                     style: TextButton.styleFrom(
                       side: const BorderSide(
@@ -70,16 +67,12 @@ class WelcomePage extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 50),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignInPage()),
-                      );
+                      goToPage(context, const SignInPage());
                     },
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
-                        const Color.fromARGB(255, 255, 255, 255)),
+                            const Color.fromARGB(255, 255, 255, 255)),
                     child: const Text(
                       "Sign In",
                       style: TextStyle(

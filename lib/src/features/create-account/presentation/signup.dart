@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/personalinfopage.dart';
+import 'package:migraine_aid/src/shared/userFunctions.dart';
 
 import '../../login/presentation/login.dart';
 import '../application/authentication.dart';
@@ -19,11 +21,11 @@ class SignUpPage extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromARGB(255, 124, 154, 88),
-                Color.fromARGB(255, 141, 184, 86),
-                Color.fromARGB(255, 101, 120, 78),
-                Color.fromARGB(255, 109, 144, 67)
-              ])),
+            Color.fromARGB(255, 124, 154, 88),
+            Color.fromARGB(255, 141, 184, 86),
+            Color.fromARGB(255, 101, 120, 78),
+            Color.fromARGB(255, 109, 144, 67)
+          ])),
 
       // Structural Container for Widgets
       child: Scaffold(
@@ -93,7 +95,7 @@ class SignUpPage extends StatelessWidget {
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelStyle:
-                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                       labelText: 'Email',
                     ),
                   )),
@@ -105,7 +107,7 @@ class SignUpPage extends StatelessWidget {
                     decoration: const InputDecoration(
                       border: UnderlineInputBorder(),
                       labelStyle:
-                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                          TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                       labelText: 'Password',
                     ),
                     obscureText: true,
@@ -121,8 +123,11 @@ class SignUpPage extends StatelessWidget {
                           controllerPassword.text.trim(),
                           controllerFirstName.text.trim(),
                           controllerLastName.text.trim());
-                      if (message == "Success!") {
-                        //do success
+                      if (await hasUserLogged()) {
+                        goToPage(
+                            context,
+                            PersonalInformationPage(
+                                name: controllerFirstName.text.trim()));
                       } else {
                         //do something with message (maybe showError(message))
                       }
@@ -147,12 +152,17 @@ class SignUpPage extends StatelessWidget {
                       String message = await registerUserByGoogle(
                           controllerFirstName.text.trim(),
                           controllerLastName.text.trim());
-                      print(message);
+                      if (await hasUserLogged()) {
+                        goToPage(
+                            context,
+                            PersonalInformationPage(
+                                name: controllerFirstName.text.trim()));
+                      }
                     },
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
-                        const Color.fromARGB(255, 223, 80, 80)),
+                            const Color.fromARGB(255, 223, 80, 80)),
                     child: const Text(
                       "Sign In With Google",
                       style: TextStyle(
@@ -165,16 +175,12 @@ class SignUpPage extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SignInPage()),
-                      );
+                      goToPage(context, const SignUpPage());
                     },
                     style: TextButton.styleFrom(
                         minimumSize: const Size(330, 70),
                         backgroundColor:
-                        const Color.fromARGB(255, 255, 255, 255)),
+                            const Color.fromARGB(255, 255, 255, 255)),
                     child: const Text(
                       "Sign In",
                       style: TextStyle(
