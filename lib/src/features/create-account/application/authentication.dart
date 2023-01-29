@@ -24,7 +24,7 @@ Future<String> registerUserByGoogle(String first, String last) async {
     return error.toString();
   }
   if (await googleSignIn.isSignedIn()) {
-    final user = ParseUser.createUser(googleSignIn.currentUser?.email,
+    final user = ParseUser.createUser(googleSignIn.currentUser?.displayName,
         googleSignIn.currentUser?.id, googleSignIn.currentUser?.email);
     user.set("firstName", first);
     user.set("lastName", last);
