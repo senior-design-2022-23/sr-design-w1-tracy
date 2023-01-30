@@ -12,6 +12,8 @@ class PersonalInformationPage extends StatefulWidget {
 
 class _PersonalInformationPageState extends State<PersonalInformationPage>
     with RestorationMixin {
+  String? sexOption = "N/A";
+  final List<bool> _selectedSex = <bool>[true, false, false];
   @override
   String? get restorationId => widget.restorationId;
 
@@ -67,199 +69,190 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
 
   @override
   Widget build(BuildContext context) {
-    String? sexOption = "N/A";
     // Top Level Container
     return Container(
-      // Background Gradient Decoration
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-            Color.fromARGB(255, 124, 154, 88),
-            Color.fromARGB(255, 141, 184, 86),
-            Color.fromARGB(255, 101, 120, 78),
-            Color.fromARGB(255, 109, 144, 67)
-          ])),
+        // Background Gradient Decoration
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+              Color.fromARGB(255, 124, 154, 88),
+              Color.fromARGB(255, 141, 184, 86),
+              Color.fromARGB(255, 101, 120, 78),
+              Color.fromARGB(255, 109, 144, 67)
+            ])),
 
-      // Structural Container for Widgets
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Container(
-          padding: const EdgeInsets.only(top: 100, left: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              // Back Arrow Button
-              Transform.translate(
-                offset: const Offset(-20, 0),
-                child: IconButton(
-                  color: const Color.fromARGB(255, 101, 101, 101),
-                  icon: const Icon(Icons.arrow_back_ios),
-                  tooltip: 'Back',
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
+        // Structural Container for Widgets
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Padding(
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
               ),
-              Text(
-                "Hi ${widget.name}, let's setup your profile!",
-                style: TextStyle(
-                    fontSize: 30, color: Color.fromARGB(255, 255, 255, 255)),
-              ),
-              Transform.translate(
-                  offset: const Offset(0, 40),
-                  child: Text(
-                    "Height",
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 255, 255, 255)),
-                  )),
-              // Container for same line Text Field
-              Container(
-                  margin: const EdgeInsets.only(top: 40),
-                  child: Row(children: <Widget>[
-                    Flexible(
-                      flex: 0,
-                      // First Name Form Field
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          constraints: BoxConstraints(maxWidth: 150),
-                          labelStyle: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255)),
-                          labelText: 'ft',
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const SizedBox(height: 30),
+                      // Back Arrow Button
+                      Transform.translate(
+                        offset: const Offset(-20, 0),
+                        child: IconButton(
+                          color: const Color.fromARGB(255, 101, 101, 101),
+                          icon: const Icon(Icons.arrow_back_ios),
+                          tooltip: 'Back',
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                    Flexible(
-                      flex: 10,
-                      // Last Name Form Field
-                      child: TextFormField(
+                      Text(
+                        "Hi ${widget.name}, let's setup your profile!",
+                        style: const TextStyle(
+                            fontSize: 30,
+                            color: Color.fromARGB(255, 255, 255, 255)),
+                      ),
+                      const SizedBox(height: 30),
+                      const Text(
+                        "Height",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 255, 255, 255)),
+                      ),
+                      // Container for same line Text Field
+                      Row(children: <Widget>[
+                        Flexible(
+                          flex: 0,
+                          // First Name Form Field
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              label: Text(
+                                "ft",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white70),
+                              ),
+                              border: UnderlineInputBorder(),
+                              constraints: BoxConstraints(maxWidth: 150),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Flexible(
+                          flex: 10,
+                          // Last Name Form Field
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              label: Text(
+                                "in",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white70),
+                              ),
+                              border: UnderlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                      ]),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Weight",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 255, 255, 255)),
+                      ),
+                      TextFormField(
                         decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelStyle: TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255)),
-                          labelText: 'in',
+                            border: UnderlineInputBorder(),
+                            constraints: BoxConstraints(maxWidth: 150),
+                            label: Text(
+                              "lbs",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white70,
+                              ),
+                            )),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Sex",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 255, 255, 255)),
+                      ),
+                      const SizedBox(height: 5),
+                      ToggleButtons(
+                        direction: Axis.horizontal,
+                        onPressed: (int index) {
+                          setState(() {
+                            for (int i = 0; i < _selectedSex.length; i++) {
+                              _selectedSex[i] = i == index;
+                            }
+                            sexOption = ['N/A', 'Male', 'Female'][index];
+                          });
+                        },
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(3)),
+                        selectedBorderColor: Colors.white,
+                        selectedColor: Colors.black,
+                        fillColor: Colors.white,
+                        color: Colors.white,
+                        constraints: const BoxConstraints(
+                          minHeight: 40.0,
+                          minWidth: 110.0,
+                        ),
+                        isSelected: _selectedSex,
+                        children: const <Widget>[
+                          Text(
+                            'Prefer Not to\n Specify',
+                            textAlign: TextAlign.center,
+                          ),
+                          Text('Male'),
+                          Text('Female')
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Date of Birth",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 255, 255, 255)),
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () =>
+                            _restorableDatePickerRouteFuture.present(),
+                        style: TextButton.styleFrom(
+                            minimumSize: const Size(330, 70),
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 255, 255)),
+                        child: const Text(
+                          'Open Date Picker',
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                  ])),
-              Transform.translate(
-                  offset: const Offset(0, 20),
-                  child: Text(
-                    "Weight",
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 255, 255, 255)),
-                  )),
-              TextFormField(
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  constraints: BoxConstraints(maxWidth: 150),
-                  labelStyle:
-                      TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                  labelText: 'lbs',
-                ),
-              ),
-              Transform.translate(
-                  offset: const Offset(0, 20),
-                  child: Text(
-                    "Sex",
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 255, 255, 255)),
-                  )),
-              Transform.translate(
-                  offset: const Offset(0, 20),
-                  child: Row(
-                    children: [
-                      Flexible(
-                          child: ListTile(
-                              textColor: Colors.white,
-                              trailing: const Text('Male'),
-                              leading: Radio<String>(
-                                  value: "Male",
-                                  groupValue: sexOption,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      sexOption = value!;
-                                    });
-                                  }))),
-                      Flexible(
-                          child: ListTile(
-                              textColor: Colors.white,
-                              trailing: const Text('Female'),
-                              leading: Radio<String>(
-                                  value: "Female",
-                                  groupValue: sexOption,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      sexOption = value;
-                                    });
-                                  }))),
-                      Flexible(
-                          child: ListTile(
-                              textColor: Colors.white,
-                              trailing: const Text('Prefer Not to Specify'),
-                              leading: Radio<String>(
-                                  fillColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                    return Colors.white;
-                                  }),
-                                  value: "N/A",
-                                  groupValue: sexOption,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      sexOption = value!;
-                                    });
-                                  }))),
+                      const SizedBox(height: 30),
+                      OutlinedButton(
+                        onPressed: () {},
+                        style: TextButton.styleFrom(
+                          side: const BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 255, 255, 255)),
+                          minimumSize: const Size(330, 70),
+                        ),
+                        child: const Text(
+                          "Continue",
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Color.fromARGB(255, 255, 255, 255)),
+                        ),
+                      ),
                     ],
-                  )),
-              Transform.translate(
-                  offset: const Offset(0, 20),
-                  child: Text(
-                    "Date of Birth",
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(255, 255, 255, 255)),
-                  )),
-              Transform.translate(
-                  offset: const Offset(0, 40),
-                  child: ElevatedButton(
-                    onPressed: () => _restorableDatePickerRouteFuture.present(),
-                    style: TextButton.styleFrom(
-                        minimumSize: const Size(330, 70),
-                        backgroundColor:
-                            const Color.fromARGB(255, 255, 255, 255)),
-                    child: const Text(
-                      'Open Date Picker',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  )),
-              Container(
-                  margin: const EdgeInsets.only(top: 70),
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      side: const BorderSide(
-                          width: 1, color: Color.fromARGB(255, 255, 255, 255)),
-                      minimumSize: const Size(330, 70),
-                    ),
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(
-                          fontSize: 17,
-                          color: Color.fromARGB(255, 255, 255, 255)),
-                    ),
-                  )),
-            ],
-          ),
-        ),
-      ),
-    );
+                  ),
+                ),
+              ),
+            )));
   }
 }
