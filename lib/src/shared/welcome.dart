@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/shared/userFunctions.dart';
 
 import '../features/create-account/presentation/signup.dart';
-import '../features/login/presentation/login.dart';
+import '../features/login/presentation/signin.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
