@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../shared/userFunctions.dart';
 import '../../login/presentation/login.dart';
+import '../../profiling/presentation/personalinfopage.dart';
 import '../application/authentication.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -128,7 +130,7 @@ class SignUpPage extends StatelessWidget {
                                   controllerFirstName.text.trim(),
                                   controllerLastName.text.trim());
                               if (message == "Success!") {
-                                //do success
+                                goToPage(context, PersonalInformationPage(name: controllerFirstName.text.trim()));
                               } else {
                                 //do something with message (maybe showError(message))
                               }
@@ -154,14 +156,16 @@ class SignUpPage extends StatelessWidget {
                               String message = await registerUserByGoogle(
                                   controllerFirstName.text.trim(),
                                   controllerLastName.text.trim());
-                              print(message);
+                              if (message == "Success!") {
+                                goToPage(context, PersonalInformationPage(name: controllerFirstName.text.trim()));
+                              }
                             },
                             style: TextButton.styleFrom(
                                 minimumSize: const Size(330, 70),
                                 backgroundColor:
                                     const Color.fromARGB(255, 223, 80, 80)),
                             child: const Text(
-                              "Sign In With Google",
+                              "Sign Up With Google",
                               style: TextStyle(
                                   fontSize: 17,
                                   color: Color.fromARGB(255, 255, 255, 255)),
@@ -172,11 +176,7 @@ class SignUpPage extends StatelessWidget {
                           margin: const EdgeInsets.only(top: 30),
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignInPage()),
-                              );
+                              goToPage(context, const SignInPage());
                             },
                             style: TextButton.styleFrom(
                                 minimumSize: const Size(330, 70),
