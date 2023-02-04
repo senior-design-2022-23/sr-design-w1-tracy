@@ -26,6 +26,5 @@ Future<bool> hasUserLogged() async {
   }else {
         return null;
       }
-
-
 }
+
