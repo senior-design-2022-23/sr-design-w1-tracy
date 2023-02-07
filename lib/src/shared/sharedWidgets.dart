@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class ErrorPopup extends StatelessWidget {
   final String errorMessage;
 
-  const ErrorPopup({super.key, required this.errorMessage});
+  const ErrorPopup({required this.errorMessage});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Colors.redAccent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -18,13 +18,24 @@ class ErrorPopup extends StatelessWidget {
               errorMessage,
               style: const TextStyle(
                 fontSize: 18.0,
-                color: Colors.red,
+                color: Colors.white,
               ),
             ),
           ),
-          OutlinedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Continue"),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            style: TextButton.styleFrom(
+            minimumSize: const Size(100, 40),
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255)),
+              child: const Text(
+                "Continue",
+              style: TextStyle(
+                fontSize: 17,
+                color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ),
           ),
         ],
       ),
