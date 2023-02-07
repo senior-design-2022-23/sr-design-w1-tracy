@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/login/presentation/login.dart';
+import 'package:migraine_aid/src/features/notifications/presentation/notificationUI.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/medicalpage.dart';
@@ -25,8 +26,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //Duration offset from current time as of now
+    AppNotification.scheduleNotification(
+        "Notification Tile", "Notification Body", const Duration(seconds: 5));
     return MaterialApp(
-      home: PersonalInformationPage(name: 'kush', restorationId: '') // Initial page upon launch
-    );
+        home: PersonalInformationPage(
+            name: 'kush', restorationId: '') // Initial page upon launch
+        );
   }
 }
