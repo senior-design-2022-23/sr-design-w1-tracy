@@ -39,9 +39,16 @@ class _ActivityPageState extends State<ActivityPage> {
     ];
     // List of items in our dropdown menu
     var waterQuestion = [
-      'Yes',
-      'No',
-      'Unsure',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9',
+      '10+'
     ];
 
     return Container(
@@ -84,7 +91,7 @@ class _ActivityPageState extends State<ActivityPage> {
                     ),
                   ),
                   const Text(
-                    "How much water do you drink?",
+                    "Approximately how many bottles of water do you drink a day?",
                     style: TextStyle(
                         fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
                   ),

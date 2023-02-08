@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/login/presentation/login.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/activitypage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/medicalpage.dart';
@@ -25,8 +26,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: PersonalInformationPage(name: 'kush', restorationId: '') // Initial page upon launch
+    return const MaterialApp(
+      home: ActivityPage() // Initial page upon launch
     );
   }
 }
