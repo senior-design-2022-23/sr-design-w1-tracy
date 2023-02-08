@@ -28,3 +28,13 @@ Future<bool> hasUserLogged() async {
       }
 }
 
+
+  Future <String> getCurrentUserName() async {
+  if(await hasUserLogged()) {
+    ParseObject? currentUser = await ParseUser.currentUser() as ParseObject?;
+    print('name: ' + currentUser?.get('firstName'));
+    return currentUser?.get('firstName');
+  }else {
+    return '';
+  }
+}
