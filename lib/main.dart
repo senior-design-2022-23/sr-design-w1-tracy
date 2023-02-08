@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:migraine_aid/src/shared/welcome.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:migraine_aid/src/features/login/presentation/login.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/activitypage.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/alcoholpage.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/medicalpage.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/personalinfopage.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/sleeppage.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
