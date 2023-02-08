@@ -34,17 +34,16 @@ showError(BuildContext context, String message) {
               height: 200,
               width: 300,
               decoration: BoxDecoration(
-                borderRadius:
-                BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
               ),
-              child: ErrorPopup(
-                  errorMessage: message),
+              child: ErrorPopup(errorMessage: message),
             ),
           )
         ]);
       });
 }
+
 Future<ParseUser?> getCurrentUser() async {
   if (await hasUserLogged()) {
     ParseUser? currentUser = await ParseUser.currentUser() as ParseUser?;
