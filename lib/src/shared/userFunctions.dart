@@ -9,7 +9,7 @@ Future<bool> hasUserLogged() async {
   }
   //Checks whether the user's session token is valid
   final ParseResponse? parseResponse =
-  await ParseUser.getCurrentUserFromServer(currentUser.sessionToken!);
+      await ParseUser.getCurrentUserFromServer(currentUser.sessionToken!);
 
   if (parseResponse?.success == null || !parseResponse!.success) {
     //Invalid session. Logout
@@ -18,15 +18,6 @@ Future<bool> hasUserLogged() async {
   } else {
     return true;
   }
-}
-
-  Future<ParseUser?> getCurrentUser() async {
-      if(await hasUserLogged()) {
-        ParseUser? currentUser = await ParseUser.currentUser() as ParseUser?;
-        return currentUser;
-  }else {
-        return null;
-      }
 }
 
 showError(BuildContext context, String message) {
@@ -53,4 +44,19 @@ showError(BuildContext context, String message) {
           )
         ]);
       });
+}
+Future<ParseUser?> getCurrentUser() async {
+  if (await hasUserLogged()) {
+    ParseUser? currentUser = await ParseUser.currentUser() as ParseUser?;
+    return currentUser;
+  } else {
+    return null;
+  }
+}
+
+void goToPage(context, page) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => page),
+  );
 }

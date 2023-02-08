@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/application/sleeppage_backend.dart';
 
+import '../../../shared/userFunctions.dart';
+import 'dietpage.dart';
+
 class SleepPage extends StatefulWidget {
   const SleepPage({Key? key,}) : super(key: key);
 
@@ -96,6 +99,8 @@ class _SleepPageState extends State<SleepPage> {
                     bool stored = await storeSleepHours(value);
                     if(!stored) {
                       // TODO: Error handling
+                    } else {
+                      goToPage(context, const DietPage());
                     }
                   },
                   child:
