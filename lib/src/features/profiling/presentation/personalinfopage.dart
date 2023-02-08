@@ -236,7 +236,8 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
                       const SizedBox(height: 30),
                       OutlinedButton(
                         onPressed: () {
-
+                          //TODO: update this when part 2 is ready
+                          // goToPage(context, const PersonalInformationPage2());
                         },
                         style: TextButton.styleFrom(
                           side: const BorderSide(
