@@ -1,5 +1,6 @@
-
+import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<bool> hasUserLogged() async {
   ParseUser? currentUser = await ParseUser.currentUser() as ParseUser?;
@@ -29,3 +30,39 @@ Future<bool> hasUserLogged() async {
 
 
 }
+
+deauthenticate(BuildContext context) {
+  BlocProvider.of<AuthenticationBloc>(context).add(Deauthenticate());
+}
+
+authenticate(BuildContext context) {
+  BlocProvider.of<AuthenticationBloc>(context).add(Authenticate());
+}
+
+enum AuthenticationState {
+  unauthenticated,
+  authenticated,
+}
+
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
+  AuthenticationBloc(super.initialState);
+
+  AuthenticationState get initialState => AuthenticationState.unauthenticated;
+
+  Stream<AuthenticationState> mapEventToState(
+      AuthenticationEvent event,
+      ) async* {
+    if (event is Authenticate) {
+      yield AuthenticationState.authenticated;
+    } else if (event is Deauthenticate) {
+      yield AuthenticationState.unauthenticated;
+    }
+  }
+}
+
+class AuthenticationEvent {}
+
+class Authenticate extends AuthenticationEvent {}
+
+class Deauthenticate extends AuthenticationEvent {}
