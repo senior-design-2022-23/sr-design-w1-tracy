@@ -20,15 +20,6 @@ Future<bool> hasUserLogged() async {
   }
 }
 
-Future<ParseUser?> getCurrentUser() async {
-      if(await hasUserLogged()) {
-        ParseUser? currentUser = await ParseUser.currentUser() as ParseUser?;
-        return currentUser;
-  }else {
-        return null;
-      }
-}
-
 showError(BuildContext context, String message) {
   showDialog(
       context: context,
