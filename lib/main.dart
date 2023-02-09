@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: WelcomePage() // Initial page upon launch
+      home: AlcoholPage() // Initial page upon launch
     );
   }
 }

@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/application/activitypage_backend.dart';
+import 'package:migraine_aid/src/shared/continueButton.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage ({Key? key}) : super(key: key);
@@ -109,27 +110,12 @@ class _ActivityPageState extends State<ActivityPage> {
                       },
                     ),
                   ),
-                  Container(
-                      margin: const EdgeInsets.only(top: 70),
-                      child: OutlinedButton(
-                        onPressed:  () async {
-                            bool stored = await storeActivity(gymDropDownValue, waterDropDownValue, waterQuestion);
-                            if(!stored) {
-                                //TODO: ERROR HANDLING
-                            }
-                        },
-                        style: TextButton.styleFrom(
-                          side: const BorderSide(
-                              width: 1, color: Color.fromARGB(255, 255, 255, 255)),
-                          minimumSize: const Size(330, 70),
-                        ),
-                        child: const Text(
-                          "Continue",
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: Color.fromARGB(255, 255, 255, 255)),
-                        ),
-                      )),
+                  ContinueButton(callback: () async {
+                    bool stored = await storeActivity(gymDropDownValue, waterDropDownValue, waterQuestion);
+                    if(!stored) {
+                      //TODO: ERROR HANDLING
+                    }
+                  }),
                 ]
             )
         )
