@@ -5,8 +5,8 @@ import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/medicalpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/personalinfopage.dart';
-import 'package:migraine_aid/src/features/profiling/presentation/sleepPageTest.dart';
-import 'package:migraine_aid/src/shared/welcome.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/sleeppage.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/userQuestionnaire.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 
@@ -17,7 +17,7 @@ void main() async {
   const keyParseServerUrl = 'https://parseapi.back4app.com';
   await Parse().initialize(keyApplicationId, keyParseServerUrl,
       clientKey: keyClientKey, autoSendSessionId: true);
-
+//
   runApp(const MyApp());
 }
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SleepPageTest() // Initial page upon launch
+      home: UserQuestionnaire() // Initial page upon launch
     );
   }
 }
