@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:migraine_aid/src/features/profiling/presentation/activitypage.dart';
-import 'package:migraine_aid/src/features/profiling/presentation/alcoholpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/medicalpage.dart';
@@ -26,6 +24,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //Duration offset from current time as of now
+    return MaterialApp(
+        home: PersonalInformationPage(
+            name: 'kush', restorationId: '') // Initial page upon launch
+        );
     return const MaterialApp(
       home: WelcomePage() // Initial page upon launch
     );
