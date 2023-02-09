@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// CODE FOR CONTINUE BUTTON. Must pass in a callback function for onPress.
 class ContinueButton extends StatefulWidget {
   final VoidCallback callback;
   const ContinueButton({super.key, required this.callback});
