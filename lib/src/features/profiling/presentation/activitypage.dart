@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/application/activitypage_backend.dart';
 import 'package:migraine_aid/src/shared/continueButton.dart';
 
+import '../../../shared/staticTextWidget.dart';
+
 class ActivityPage extends StatefulWidget {
   const ActivityPage ({Key? key}) : super(key: key);
 
@@ -21,12 +23,6 @@ class _ActivityPageState extends State<ActivityPage> {
     gymDropDownValue  = 'None (0x)';
     waterDropDownValue = 'Unsure';
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +62,8 @@ class _ActivityPageState extends State<ActivityPage> {
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "How often do you exercise?",
-                    style: TextStyle(
-                        fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
-                  ),
+                  const StaticTextWidget(text:"How often do you exercise?"),
+
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: DropdownButton(
@@ -88,11 +81,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       },
                     ),
                   ),
-                  const Text(
-                    "Approximately how many bottles of water do you drink a day?",
-                    style: TextStyle(
-                        fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
-                  ),
+                  const StaticTextWidget(text:"Approximately how many bottles of water do you drink a day?"),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: DropdownButton(

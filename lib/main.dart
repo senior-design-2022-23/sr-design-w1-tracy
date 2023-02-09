@@ -5,6 +5,7 @@ import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/medicalpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/personalinfopage.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/sleepPageTest.dart';
 import 'package:migraine_aid/src/shared/welcome.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
@@ -26,8 +27,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: AlcoholPage() // Initial page upon launch
+    return MaterialApp(
+      home: SleepPageTest() // Initial page upon launch
     );
   }
 }

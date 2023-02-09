@@ -6,6 +6,7 @@ import 'package:migraine_aid/src/features/profiling/application/activitypage_bac
 import 'package:migraine_aid/src/features/profiling/application/alcoholpage_backend.dart';
 
 import '../../../shared/continueButton.dart';
+import '../../../shared/staticTextWidget.dart';
 
 class AlcoholPage extends StatefulWidget {
   const AlcoholPage ({Key? key}) : super(key: key);
@@ -68,11 +69,7 @@ class _AlcoholPageState extends State<AlcoholPage> {
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "How often do you drink alcohol every week?",
-                    style: TextStyle(
-                        fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
-                  ),
+                  const StaticTextWidget(text:"How often do you drink alcohol every week?"),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: DropdownButton(
@@ -90,11 +87,7 @@ class _AlcoholPageState extends State<AlcoholPage> {
                       },
                     ),
                   ),
-                  const Text(
-                    "On average, how much alcohol do you consume when you drink?",
-                    style: TextStyle(
-                        fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
-                  ),
+                  const StaticTextWidget(text:"On average, how much alcohol do you consume when you drink?"),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: DropdownButton(
