@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/shared/staticTextWidget.dart';
 
+// NOTE: THIS IS A TEMPLATE PAGE. MAKE BETTER IF POSSIBLE
 class BasePage extends StatefulWidget {
   final Widget body;
   final String title;

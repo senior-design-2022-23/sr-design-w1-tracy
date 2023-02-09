@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// This takes in a text and a fontSize, and follows our decorations for text.
 class StaticTextWidget extends StatelessWidget {
   final String text;
   final double fontSize;

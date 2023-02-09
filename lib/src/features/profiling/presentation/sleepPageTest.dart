@@ -9,6 +9,8 @@ import '../../../shared/userFunctions.dart';
 import '../application/sleeppage_backend.dart';
 import 'dietpage.dart';
 
+
+// THIS IS A TEST TO SHOW HOW THE BASE PAGE IS USED AS A TEMPLATE.
 class SleepPageTest extends StatefulWidget {
   const SleepPageTest({
     Key? key,
