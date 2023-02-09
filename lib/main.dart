@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
             name: 'kush', restorationId: '') // Initial page upon launch
         );
     return const MaterialApp(
-      home: WelcomePage() // Initial page upon launch
+      home: AlcoholPage() // Initial page upon launch
     );
   }
 }
