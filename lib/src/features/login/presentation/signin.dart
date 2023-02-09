@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/personalinfopage.dart';
+import 'package:migraine_aid/src/shared/userFunctions.dart';
 
 import '../../create-account/presentation/signup.dart';
 import '../application/login_authentication.dart';
@@ -102,7 +104,16 @@ class SignInPage extends StatelessWidget {
                       Container(
                           margin: const EdgeInsets.only(top: 30),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              if (await loginWithGoogle() == "Success!") {
+                                // final firstName;
+                                // getCurrentUser().then((user) => {
+                                //   firstName = user.
+                                // });
+                                //TODO: figure out how to get user's name when logged in from Google
+                                goToPage(context, PersonalInformationPage(name: ""));
+                              }
+                              },
                             style: TextButton.styleFrom(
                                 minimumSize: const Size(330, 70),
                                 backgroundColor:
@@ -119,11 +130,7 @@ class SignInPage extends StatelessWidget {
                           margin: const EdgeInsets.only(top: 30),
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignUpPage()),
-                              );
+                              goToPage(context, const SignUpPage());
                             },
                             style: TextButton.styleFrom(
                                 minimumSize: const Size(330, 70),

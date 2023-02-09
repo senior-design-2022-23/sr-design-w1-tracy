@@ -1,7 +1,6 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 
+import '../../../shared/userFunctions.dart';
 import '../application/dietpage_backend.dart';
 
 class DietPage extends StatelessWidget {
@@ -22,50 +21,47 @@ class DietPage extends StatelessWidget {
             ])),
         child: Scaffold(
             backgroundColor: Colors.transparent,
-            body: Container(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                  const Text(
-                    "Do you have any of the following"
-                    " dietary preferences and/or restrictions?",
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Color.fromARGB(255, 255, 255, 255)),
-                  ),
-                  Container(
-                      padding: const EdgeInsets.all(15),
-                      child: ButtonBar(
-                          mainAxisSize: MainAxisSize.min,
-                          alignment: MainAxisAlignment.spaceBetween,
-                          buttonPadding: EdgeInsets.all(2),
-                          children: <Widget>[
-                            _dietChoice(
-                                "SAD - Standard American Diet", context),
-                            _dietChoice("AFD - Asian Food Diet", context),
-                            _dietChoice("FFD - Fast Food Diet", context),
-                            _dietChoice(
-                                "Pescatarian / Mediterranean Diet", context),
-                            _dietChoice("Gluten Free Diet", context),
-                            _dietChoice("Vegetarian Diet", context),
-                            _dietChoice("Vegan Diet", context),
-                            _dietChoice("Paleo Diet", context)
-                          ]))
-                ]))));
+            body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+              const Text(
+                "Do you have any of the following"
+                " dietary preferences and/or restrictions?",
+                style: TextStyle(
+                    fontSize: 40,
+                    color: Color.fromARGB(255, 255, 255, 255)),
+              ),
+              Container(
+                  padding: const EdgeInsets.all(15),
+                  child: ButtonBar(
+                      mainAxisSize: MainAxisSize.min,
+                      alignment: MainAxisAlignment.spaceBetween,
+                      buttonPadding: const EdgeInsets.all(2),
+                      children: <Widget>[
+                        _dietChoice(
+                            "SAD - Standard American Diet", context),
+                        _dietChoice("AFD - Asian Food Diet", context),
+                        _dietChoice("FFD - Fast Food Diet", context),
+                        _dietChoice(
+                            "Pescatarian / Mediterranean Diet", context),
+                        _dietChoice("Gluten Free Diet", context),
+                        _dietChoice("Vegetarian Diet", context),
+                        _dietChoice("Vegan Diet", context),
+                        _dietChoice("Paleo Diet", context)
+                      ]))
+            ])));
   }
 
   OutlinedButton _dietChoice(String option, BuildContext context) {
     return (OutlinedButton(
       onPressed: () async {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const DietPage())); // TODO),);
         bool stored = await storeDiet(option);
         if(!stored) {
           //TODO: ERROR HANDLING
+        } else {
+          // goToPage(context, const DietPage2());
+          //TODO: fix this when this page is added
         }
-
       },
       style: TextButton.styleFrom(
         side: const BorderSide(
