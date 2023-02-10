@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/features/profiling/application/personalinfopage_backend.dart';
 
 class PersonalInformationPage extends StatefulWidget {
   final String name;
@@ -14,6 +15,12 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
     with RestorationMixin {
   @override
   String? get restorationId => widget.restorationId;
+
+  String? sexOption = "N/A";
+  String? weight;
+  String? feet;
+  String? inches;
+  String? DOB;
 
   final RestorableDateTime _selectedDate =
       RestorableDateTime(DateTime(2021, 7, 25));
@@ -57,6 +64,8 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
     if (newSelectedDate != null) {
       setState(() {
         _selectedDate.value = newSelectedDate;
+        DOB =
+            '${_selectedDate.value.month}/${_selectedDate.value.day}/${_selectedDate.value.year}';
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
@@ -67,7 +76,6 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
 
   @override
   Widget build(BuildContext context) {
-    String? sexOption = "N/A";
     // Top Level Container
     return Container(
       // Background Gradient Decoration
@@ -104,12 +112,12 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
               ),
               Text(
                 "Hi ${widget.name}, let's setup your profile!",
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 30, color: Color.fromARGB(255, 255, 255, 255)),
               ),
               Transform.translate(
                   offset: const Offset(0, 40),
-                  child: Text(
+                  child: const Text(
                     "Height",
                     style: TextStyle(
                         fontSize: 20,
@@ -123,6 +131,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
                       flex: 0,
                       // First Name Form Field
                       child: TextFormField(
+                        onChanged: (value) => feet = value,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           constraints: BoxConstraints(maxWidth: 150),
@@ -137,6 +146,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
                       flex: 10,
                       // Last Name Form Field
                       child: TextFormField(
+                        onChanged: (value) => inches = value,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelStyle: TextStyle(
@@ -149,13 +159,14 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
                   ])),
               Transform.translate(
                   offset: const Offset(0, 20),
-                  child: Text(
+                  child: const Text(
                     "Weight",
                     style: TextStyle(
                         fontSize: 20,
                         color: Color.fromARGB(255, 255, 255, 255)),
                   )),
               TextFormField(
+                onChanged: (value) => weight = value,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   constraints: BoxConstraints(maxWidth: 150),
@@ -166,7 +177,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
               ),
               Transform.translate(
                   offset: const Offset(0, 20),
-                  child: Text(
+                  child: const Text(
                     "Sex",
                     style: TextStyle(
                         fontSize: 20,
@@ -221,7 +232,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
                   )),
               Transform.translate(
                   offset: const Offset(0, 20),
-                  child: Text(
+                  child: const Text(
                     "Date of Birth",
                     style: TextStyle(
                         fontSize: 20,
@@ -243,7 +254,14 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
               Container(
                   margin: const EdgeInsets.only(top: 70),
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      bool stored = await storePersonalInfo(
+                          "$feet'$inches", weight, sexOption, DOB);
+                      print(stored);
+                      if (!stored) {
+                        //TODO: ERROR HANDLING
+                      }
+                    },
                     style: TextButton.styleFrom(
                       side: const BorderSide(
                           width: 1, color: Color.fromARGB(255, 255, 255, 255)),
