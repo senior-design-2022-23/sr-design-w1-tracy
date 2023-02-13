@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/application/sleeppage_backend.dart';
+import 'package:migraine_aid/src/shared/toggleButton.dart';
+
+import '../../../shared/userFunctions.dart';
+import 'dietpage.dart';
 
 class SleepPage extends StatefulWidget {
   const SleepPage({Key? key,}) : super(key: key);
@@ -11,11 +15,12 @@ class SleepPage extends StatefulWidget {
 
 class _SleepPageState extends State<SleepPage> {
   int value = 0;
-
+  String regular = 'T';
   @override
   void initState() {
     super.initState();
     value = 0;
+    regular = 'T';
   }
 
 
@@ -89,13 +94,25 @@ class _SleepPageState extends State<SleepPage> {
 
                 ],
               ),
-              // continue button
+              const Text(
+                "Is your sleep pattern regular",
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white
+                ),
+              ),
+              ToggleButton(callback: (regular) {
+                this.regular = regular;
+              }),
+              SizedBox(height: 16),
               OutlinedButton(
                   onPressed: ()
                   async {
-                    bool stored = await storeSleepHours(value);
+                    bool stored = await storeSleepHours(value, regular);
                     if(!stored) {
                       // TODO: Error handling
+                    } else {
+                      goToPage(context, const DietPage());
                     }
                   },
                   child:

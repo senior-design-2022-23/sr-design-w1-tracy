@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<bool> hasUserLogged() async {
   ParseUser? currentUser = await ParseUser.currentUser() as ParseUser?;
@@ -28,6 +27,12 @@ Future<bool> hasUserLogged() async {
         return null;
       }
 
+void goToPage(context, page) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => page),
+  );
+}
 
 }
 
