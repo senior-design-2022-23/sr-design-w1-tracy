@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:migraine_aid/src/features/daily-forms/presentation/dailylogpage.dart';
-import 'package:migraine_aid/src/features/profiling/presentation/activitypage.dart';
-import 'package:migraine_aid/src/features/profiling/presentation/alcoholpage.dart';
+
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/medicalpage.dart';
