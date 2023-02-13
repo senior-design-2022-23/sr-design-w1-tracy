@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/application/activitypage_backend.dart';
 
+import '../../../shared/userFunctions.dart';
+import 'alcoholpage.dart';
+
 class ActivityPage extends StatefulWidget {
   const ActivityPage ({Key? key}) : super(key: key);
 
@@ -117,6 +120,7 @@ class _ActivityPageState extends State<ActivityPage> {
                             if(!stored) {
                                 //TODO: ERROR HANDLING
                             }
+                            goToPage(context, const AlcoholPage());
                         },
                         style: TextButton.styleFrom(
                           side: const BorderSide(

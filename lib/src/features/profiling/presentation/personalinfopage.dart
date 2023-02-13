@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/sleeppage.dart';
+
+import '../../../shared/userFunctions.dart';
 
 class PersonalInformationPage extends StatefulWidget {
   final String name;
@@ -236,8 +239,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
                       const SizedBox(height: 30),
                       OutlinedButton(
                         onPressed: () {
-                          //TODO: update this when part 2 is ready
-                          // goToPage(context, const PersonalInformationPage2());
+                          goToPage(context, const SleepPage());
                         },
                         style: TextButton.styleFrom(
                           side: const BorderSide(
