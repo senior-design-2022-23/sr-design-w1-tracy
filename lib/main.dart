@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/dietpage.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/medicalpage.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: UserQuestionnaire() // Initial page upon launch
+      home: DailyLoginPage() // Initial page upon launch
     );
   }
 }
