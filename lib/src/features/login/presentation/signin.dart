@@ -87,6 +87,7 @@ class SignInPage extends StatelessWidget {
                               await doUserLogin(userController.text.trim(),
                                   passwordController.text.trim());
                               if (await hasUserLogged()) {
+                                //TODO: figure out how to get user's name
                                 goToPage(
                                     context, PersonalInformationPage(name: ""));
                               }
