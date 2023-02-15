@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/presentation/sleeppage.dart';
 
+import '../../../shared/continueButton.dart';
 import '../../../shared/userFunctions.dart';
 
 class PersonalInformationPage extends StatefulWidget {

@@ -1,12 +1,11 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:migraine_aid/src/features/profiling/application/activitypage_backend.dart';
 import 'package:migraine_aid/src/features/profiling/application/alcoholpage_backend.dart';
 
+import '../../../shared/continueButton.dart';
+
 class AlcoholPage extends StatefulWidget {
-  const AlcoholPage ({Key? key}) : super(key: key);
+  const AlcoholPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AlcoholPageState();
@@ -24,18 +23,12 @@ class _AlcoholPageState extends State<AlcoholPage> {
     'Everyday (>=7x)'
   ];
   // List of items in our dropdown menu
-  var alcoholOnDayMap = [
-    '1-2',
-    '3-4',
-    '5-6',
-    '7-9',
-    '10+'
-  ];
+  var alcoholOnDayMap = ['1-2', '3-4', '5-6', '7-9', '10+'];
 
   @override
   void initState() {
     super.initState();
-    daysDrank  = 'None (0x)';
+    daysDrank = 'None (0x)';
     alcoholPerDay = '1-2';
   }
 
@@ -44,85 +37,74 @@ class _AlcoholPageState extends State<AlcoholPage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color.fromARGB(255, 124, 154, 88),
-                  Color.fromARGB(255, 141, 184, 86),
-                  Color.fromARGB(255, 101, 120, 78),
-                  Color.fromARGB(255, 109, 144, 67)
-                ])),
-
+              Color.fromARGB(255, 124, 154, 88),
+              Color.fromARGB(255, 141, 184, 86),
+              Color.fromARGB(255, 101, 120, 78),
+              Color.fromARGB(255, 109, 144, 67)
+            ])),
         child: Scaffold(
             backgroundColor: Colors.transparent,
-            body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "How often do you drink alcohol every week?",
-                    style: TextStyle(
-                        fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: DropdownButton(
-                      value: daysDrank,
-                      items: alcoholPerWeekMap.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          daysDrank = newValue!;
-                        });
-                      },
-                    ),
-                  ),
-                  const Text(
-                    "On average, how much alcohol do you consume when you drink?",
-                    style: TextStyle(
-                        fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: DropdownButton(
-                      value: alcoholPerDay,
-                      items: alcoholOnDayMap.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          alcoholPerDay = newValue!;
-                        });
-                      },
-                    ),
-                  ),
-                  ContinueButton(callback: () async {
-                    bool stored = await storeAlcohol(daysDrank, alcoholPerDay);
-                    if(!stored) {
-                      //TODO: ERROR HANDLING
-                    }
-                    //goToPage(context, const HomePage());
-                  }),
-                ]
-            )
-        )
-    );
+            body:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text(
+                "How often do you drink alcohol every week?",
+                style: TextStyle(
+                    fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: DropdownButton(
+                  value: daysDrank,
+                  items: alcoholPerWeekMap.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      daysDrank = newValue!;
+                    });
+                  },
+                ),
+              ),
+              const Text(
+                "On average, how much alcohol do you consume when you drink?",
+                style: TextStyle(
+                    fontSize: 40, color: Color.fromARGB(255, 255, 255, 255)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: DropdownButton(
+                  value: alcoholPerDay,
+                  items: alcoholOnDayMap.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      alcoholPerDay = newValue!;
+                    });
+                  },
+                ),
+              ),
+              ContinueButton(callback: () async {
+                bool stored = await storeAlcohol(daysDrank, alcoholPerDay);
+                if (!stored) {
+                  //TODO: ERROR HANDLING
+                }
+                //goToPage(context, const HomePage());
+              }),
+            ])));
   }
-
 }
-
-
