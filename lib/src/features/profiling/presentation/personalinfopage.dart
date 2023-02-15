@@ -237,23 +237,10 @@ class _PersonalInformationPageState extends State<PersonalInformationPage>
                         ),
                       ),
                       const SizedBox(height: 30),
-                      OutlinedButton(
-                        onPressed: () {
-                          goToPage(context, const SleepPage());
-                        },
-                        style: TextButton.styleFrom(
-                          side: const BorderSide(
-                              width: 1,
-                              color: Color.fromARGB(255, 255, 255, 255)),
-                          minimumSize: const Size(330, 70),
-                        ),
-                        child: const Text(
-                          "Continue",
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: Color.fromARGB(255, 255, 255, 255)),
-                        ),
-                      ),
+                      ContinueButton(callback: () async {
+                        //TODO: update this when part 2 is ready
+                        goToPage(context, const SleepPage());
+                      }),
                     ],
                   ),
                 ),

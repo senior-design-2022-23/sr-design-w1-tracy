@@ -1,9 +1,9 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../../shared/userFunctions.dart';
-import '../application/alcoholpage_backend.dart';
+import 'package:migraine_aid/src/features/profiling/application/activitypage_backend.dart';
+import 'package:migraine_aid/src/features/profiling/application/alcoholpage_backend.dart';
 
 class AlcoholPage extends StatefulWidget {
   const AlcoholPage ({Key? key}) : super(key: key);
@@ -110,31 +110,13 @@ class _AlcoholPageState extends State<AlcoholPage> {
                       },
                     ),
                   ),
-                  Container(
-                      margin: const EdgeInsets.only(top: 70),
-                      child: OutlinedButton(
-                        onPressed:  () async {
-                          print('we here');
-                          bool stored = await storeAlcohol(daysDrank, alcoholPerDay);
-                          print(stored);
-                          if(!stored) {
-                            //TODO: ERROR HANDLING
-                          }
-                          //TODO: ADD HOME PAGE AND UNCOMMENT TO CONNECT
-                          // goToPage(context, const HomePage());
-                        },
-                        style: TextButton.styleFrom(
-                          side: const BorderSide(
-                              width: 1, color: Color.fromARGB(255, 255, 255, 255)),
-                          minimumSize: const Size(330, 70),
-                        ),
-                        child: const Text(
-                          "Continue",
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: Color.fromARGB(255, 255, 255, 255)),
-                        ),
-                      )),
+                  ContinueButton(callback: () async {
+                    bool stored = await storeAlcohol(daysDrank, alcoholPerDay);
+                    if(!stored) {
+                      //TODO: ERROR HANDLING
+                    }
+                    //goToPage(context, const HomePage());
+                  }),
                 ]
             )
         )

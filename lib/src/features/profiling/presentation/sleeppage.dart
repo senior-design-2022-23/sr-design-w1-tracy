@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/application/sleeppage_backend.dart';
 import 'package:migraine_aid/src/shared/toggleButton.dart';
 
+import '../../../shared/continueButton.dart';
 import '../../../shared/userFunctions.dart';
 import 'dietpage.dart';
 
@@ -105,26 +106,15 @@ class _SleepPageState extends State<SleepPage> {
                 this.regular = regular;
               }),
               SizedBox(height: 16),
-              OutlinedButton(
-                  onPressed: ()
-                  async {
-                    bool stored = await storeSleepHours(value, regular);
-                    if(!stored) {
-                      // TODO: Error handling
-                    } else {
-                      goToPage(context, const DietPage());
-                    }
-                  },
-                  child:
-                  const Text(
-                      "CONTINUE",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                      )
-                  )
-              )
+              ContinueButton(callback: ()
+              async {
+                bool stored = await storeSleepHours(value, regular);
+                if(!stored) {
+                  // TODO: Error handling
+                } else {
+                  goToPage(context, const DietPage());
+                }
+              }),
             ],
 
         )
