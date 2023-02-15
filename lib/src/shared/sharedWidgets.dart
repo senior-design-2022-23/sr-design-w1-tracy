@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:migraine_aid/src/shared/userFunctions.dart';
 import 'package:migraine_aid/src/shared/welcome.dart';
@@ -21,7 +20,6 @@ class AuthenticationWidget extends StatelessWidget {
     );
   }
 }
-=======
 
 class ErrorPopup extends StatelessWidget {
   final String errorMessage;
@@ -65,4 +63,3 @@ class ErrorPopup extends StatelessWidget {
     );
   }
 }
->>>>>>> main
