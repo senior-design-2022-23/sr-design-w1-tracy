@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../shared/userFunctions.dart';
 import '../application/dietpage_backend.dart';
+import 'activitypage.dart';
 
 class DietPage extends StatelessWidget {
   const DietPage({Key? key}) : super(key: key);
@@ -59,8 +60,7 @@ class DietPage extends StatelessWidget {
         if(!stored) {
           //TODO: ERROR HANDLING
         } else {
-          // goToPage(context, const DietPage2());
-          //TODO: fix this when this page is added
+          goToPage(context, const ActivityPage());
         }
       },
       style: TextButton.styleFrom(

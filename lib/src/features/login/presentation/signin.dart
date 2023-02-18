@@ -24,7 +24,7 @@ class SignInPage extends StatelessWidget {
               Color.fromARGB(255, 101, 120, 78),
               Color.fromARGB(255, 109, 144, 67)
             ])),
-      // Background Gradient Decoration
+        // Background Gradient Decoration
         // Structural Container for Widgets
         child: Scaffold(
             backgroundColor: Colors.transparent,
@@ -86,6 +86,11 @@ class SignInPage extends StatelessWidget {
                             onPressed: () async {
                               await doUserLogin(userController.text.trim(),
                                   passwordController.text.trim());
+                              if (await hasUserLogged()) {
+                                //TODO: figure out how to get user's name
+                                goToPage(
+                                    context, PersonalInformationPage(name: ""));
+                              }
                             },
                             style: TextButton.styleFrom(
                               side: const BorderSide(
@@ -111,9 +116,10 @@ class SignInPage extends StatelessWidget {
                                 //   firstName = user.
                                 // });
                                 //TODO: figure out how to get user's name when logged in from Google
-                                goToPage(context, PersonalInformationPage(name: ""));
+                                goToPage(
+                                    context, PersonalInformationPage(name: ""));
                               }
-                              },
+                            },
                             style: TextButton.styleFrom(
                                 minimumSize: const Size(330, 70),
                                 backgroundColor:
