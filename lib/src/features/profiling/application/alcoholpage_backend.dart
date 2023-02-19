@@ -16,6 +16,13 @@ Future<bool> storeAlcohol(daysDrank, alcDay) async {
     var obj = (parseResponse.results!.first) as ParseObject;
     obj..set('DaysDrank', daysDrank)
       ..set('AlcoholOnDay', alcDay);
+
+    List<dynamic> array = obj.get('questions') ?? [];
+    List<String> alcoholQuestion = ['Did you consume any alcohol today', 'How much alcohol did you consume today'];
+    if (alcoholQuestion[0] != 'None (0x)' && !array.contains(alcoholQuestion)) {
+      array.add(alcoholQuestion);
+    }
+    obj.set('questions', array);
     await obj.save();
     return true;
   }
