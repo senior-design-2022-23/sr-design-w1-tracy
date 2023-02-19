@@ -20,8 +20,8 @@ class AppNotification {
         notificationBody,
         tz.TZDateTime.now(tz.local).add(duration),
         const NotificationDetails(
-            android:
-                AndroidNotificationDetails('TestID', 'Daily Form Channel')),
+            android: AndroidNotificationDetails('TestID', 'Daily Form Channel',
+                'Trigger Report has beeb generated')),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
@@ -41,7 +41,8 @@ class AppNotification {
   static void _initLocalNotifications() {
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('test');
-    var initializationSettingsIOS = const DarwinInitializationSettings();
+
+    var initializationSettingsIOS = const IOSInitializationSettings();
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
