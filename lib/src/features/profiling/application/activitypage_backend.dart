@@ -4,7 +4,7 @@ import '../../../shared/userFunctions.dart';
 
 Future<bool> storeActivity(gym, water, List<String> waterQuestion) async {
   String askGym = 'Did you go to the gym today?';
-  String askWater = 'How many bottles of water did you drink today';
+  String askWater = 'How many bottles of water did you drink today?';
 
   await doUserLogin('kbhuwalk@gmail.com', 'Kush1234');
   ParseUser? user = await getCurrentUser();

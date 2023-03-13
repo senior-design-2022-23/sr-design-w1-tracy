@@ -18,7 +18,7 @@ Future<bool> storeAlcohol(daysDrank, alcDay) async {
       ..set('AlcoholOnDay', alcDay);
 
     List<dynamic> array = obj.get('questions') ?? [];
-    List<String> alcoholQuestion = ['Did you consume any alcohol today', 'How much alcohol did you consume today'];
+    List<String> alcoholQuestion = ['Did you consume any alcohol today', 'How much alcohol did you drink today?'];
     if (alcoholQuestion[0] != 'None (0x)' && !array.contains(alcoholQuestion[0])) {
       array.add(alcoholQuestion[0]);
       array.add(alcoholQuestion[1]);

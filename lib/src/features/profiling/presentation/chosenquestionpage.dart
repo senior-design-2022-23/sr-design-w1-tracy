@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/features/profiling/application/userQuestionnaireBackend.dart';
+import 'package:migraine_aid/src/features/profiling/presentation/editquestionspage.dart';
 import 'package:migraine_aid/src/shared/staticTextWidget.dart';
 
 import '../../../shared/basePage.dart';
@@ -75,6 +76,7 @@ class _UserQuestionnaireState extends State<UserQuestionnaire> {
                 ContinueButton(
                   callback: ()    // TODO: push to choose questions
                   async {
+                    goToPage(context, const EditQuestionnaire());
                   },
                   content: Row (
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -93,6 +95,7 @@ class _UserQuestionnaireState extends State<UserQuestionnaire> {
                 ContinueButton(
                   callback: ()  // TODO: push somewhere
                   async {
+
                   },
                 ),
               ],
