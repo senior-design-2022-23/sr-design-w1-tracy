@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Application/PageBuilder.dart';
 
 class NavigationService extends StatefulWidget {
   final Widget initialPage;
-
   const NavigationService(this.initialPage);
 
   @override
@@ -11,7 +11,8 @@ class NavigationService extends StatefulWidget {
 
 class _NavigationServiceState extends State<NavigationService> {
   late Widget _currentPage;
-
+  late List<Widget> _currentPageSet;
+  int _currentPageIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -20,16 +21,14 @@ class _NavigationServiceState extends State<NavigationService> {
 
   Widget get currentPage => _currentPage;
 
-  void navigateToPage(Widget page) {
+  void pressContinue() {
     setState(() {
-      _currentPage = page;
+      _currentPage = _currentPageSet[_currentPageIndex++];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: widget.initialPage,
-    );
+    return _currentPage;
   }
 }

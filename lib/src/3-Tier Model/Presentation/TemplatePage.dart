@@ -17,9 +17,6 @@ class TemplatePageState extends State<TemplatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
