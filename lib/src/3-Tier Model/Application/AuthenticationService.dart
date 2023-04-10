@@ -1,4 +1,5 @@
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Data/ParseServerProxy.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 
 class AuthenticationService {
@@ -13,8 +14,7 @@ class AuthenticationService {
       String? firstName,
       String? lastName}) async {
     try {
-      final user =
-          ParseUser.createUser(null, password, email); // USERNAME NOT NEEDED
+      final user = await ParseServer.getUser(email, password); // USERNAME NOT NEEDED
       if (firstName != null && lastName != null) {
         user.set("firstName", firstName);
         user.set("lastName", lastName);
@@ -34,7 +34,7 @@ class AuthenticationService {
   Future<String?> logIn(
       {required String email, required String password}) async {
     try {
-      final user = ParseUser(null, email, password); // USERNAME NOT NEEDED
+      final user = await ParseServer.getUser(email, password);
       final response = await user.login();
       if (response.success) {
         return null;
@@ -65,7 +65,7 @@ class AuthenticationService {
   // Log out
   Future<void> logOut() async {
     await _googleSignIn.signOut();
-    ParseUser user = await ParseUser.currentUser();
+    ParseUser user = await ParseServer.currentUser();
     user.logout();
   }
 }

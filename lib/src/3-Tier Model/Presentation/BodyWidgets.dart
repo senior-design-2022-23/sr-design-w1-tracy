@@ -9,8 +9,8 @@ class BodyWidgets {
     );
   }
 
-  static Widget createQuestion(String label) {
-    return TextFormField(
+  static BodyWidget createQuestion(String label, String shorthand) {
+    return BodyWidget(shorthand, TextFormField(
       decoration: InputDecoration(
           border: const UnderlineInputBorder(),
           constraints: const BoxConstraints(maxWidth: 150),
@@ -21,14 +21,11 @@ class BodyWidgets {
               color: Colors.white70,
             ),
           )),
-    );
+    ));
   }
 
-  static Widget createDoubleQuestion(
-    String firstLabel,
-    String secondLabel,
-  ) {
-    return Row(children: <Widget>[
+  static BodyWidget createDoubleQuestion(String firstLabel, String secondLabel, String shorthand) {
+    return BodyWidget(shorthand, Row(children: <Widget>[
       Flexible(
         flex: 0,
         // First Name Form Field
@@ -58,11 +55,11 @@ class BodyWidgets {
         ),
       ),
       const Spacer(),
-    ]);
+    ]));
   }
 
-  static Widget createToggleOptions(
-      int selectedOptionIndex, List<String> optionsList) {
+  static BodyWidget createToggleOptions(
+      int selectedOptionIndex, List<String> optionsList, String shorthand) {
     var booleanList = <bool>[];
     var widgetList = <Widget>[];
     int index = 0;
@@ -75,7 +72,7 @@ class BodyWidgets {
       ));
       index = index + 1;
     }
-    return StatefulBuilder(
+    return BodyWidget(shorthand, StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return ToggleButtons(
         direction: Axis.horizontal,
@@ -98,11 +95,11 @@ class BodyWidgets {
         isSelected: booleanList,
         children: widgetList,
       );
-    });
+    }));
   }
 
-  static Widget createIntCounter(int value) {
-    return StatefulBuilder(
+  static BodyWidget createIntCounter(int value, String shorthand) {
+    return BodyWidget(shorthand, StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -144,7 +141,7 @@ class BodyWidgets {
           ),
         ],
       );
-    });
+    }));
   }
 
   static Widget createBackButton(Function onPressed) {
@@ -198,5 +195,31 @@ class BodyWidgets {
         ),
       ),
     );
+  }
+}
+
+class BodyWidget {
+  final String question;
+  late dynamic response;
+  final Widget widget;
+  BodyWidget(this.question, this.widget);
+
+  Widget getWidget() {
+    return widget;
+  }
+  String getQuestion() {
+    return question;
+  }
+
+  dynamic getResponse() {
+    return response;
+  }
+
+  void setResponse(response) {
+    this.response = response;
+  }
+
+  @override
+  Element createElement() {
   }
 }
