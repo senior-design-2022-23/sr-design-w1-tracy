@@ -9,6 +9,7 @@ class MigraineLocatorPage extends StatefulWidget {
 }
 
 class _LocatorState extends State<MigraineLocatorPage> {
+  int headIndex = 0;
   @override
   Widget build(BuildContext context) {
     var proxy = ModelViewerProxy();
@@ -19,7 +20,10 @@ class _LocatorState extends State<MigraineLocatorPage> {
             alignment: const Alignment(-.50, 0),
             child: FloatingActionButton(
               onPressed: () {
-                proxy.prevModel();
+                setState(() {
+                  headIndex -= 1;
+                  proxy.loadModel(headIndex);
+                });
               },
               child: const Icon(Icons.navigate_before),
             ),
@@ -28,14 +32,17 @@ class _LocatorState extends State<MigraineLocatorPage> {
             alignment: const Alignment(.50, 0),
             child: FloatingActionButton(
               onPressed: () {
-                proxy.nextModel();
+                setState(() {
+                  headIndex += 1;
+                  proxy.loadModel(headIndex);
+                });
               },
               child: const Icon(Icons.navigate_next),
             ),
           ),
         ],
       ),
-      body: proxy.createModelView(),
+      body: proxy.init(),
     );
   }
 }
