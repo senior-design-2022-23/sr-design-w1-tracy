@@ -1,19 +1,26 @@
 import "package:webview_flutter/webview_flutter.dart";
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
+final List<String> models = [
+  'assets/models/human_head.glb',
+  'assets/models/tension.glb'
+];
 
 class ModelViewerProxy {
-  List<String> models = [
-    'assets/models/human_head.glb',
-    'assets/models/tension.glb'
-  ];
-  String currentAsset = 'assets/models/human_head.glb';
+  String currentAsset = models[1];
   late WebViewController _controller;
   late ModelViewer viewer;
 
-  ModelViewer createModelView() {
-    viewer = ModelViewer(
+  ModelViewer init() {
+    viewer = createModelView(currentAsset);
+    return viewer;
+  }
+
+  ModelViewer createModelView(String src) {
+    return ModelViewer(
       id: "MainViewer",
-      src: currentAsset,
+      src: src,
       alt: "Base Head",
       autoRotate: true,
       cameraControls: true,
@@ -29,20 +36,13 @@ class ModelViewerProxy {
               modelViewer.src = assetPath;
             }""",
     );
-    return viewer;
   }
 
-  void prevModel() {
-    var index = models.indexOf(currentAsset) - 1;
-    index = index ~/ models.length;
-    var nextModel = models[index];
-    _controller.runJavaScript("""setSrc("$nextModel");""");
-  }
-
-  void nextModel() {
-    var index = models.indexOf(currentAsset) + 1;
-    index = index ~/ models.length;
-    var nextModel = models[index];
-    _controller.runJavaScript("""setSrc("$nextModel");""");
+  void loadModel(int index) {
+    index = index % models.length;
+    currentAsset = models[index];
+    print(currentAsset);
+    viewer = createModelView(currentAsset);
+    _controller.runJavaScript("""setSrc("$currentAsset");""");
   }
 }
