@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:migraine_aid/src/3-Tier%20Model/Application/PageBuilder.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Application/PageSetBuilder.dart';
 
 class NavigationService extends StatefulWidget {
   final Widget initialPage;

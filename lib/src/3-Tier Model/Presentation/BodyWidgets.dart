@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BodyWidgets {
+class WidgetConstructor {
   static Widget createText(String questionText) {
     return Text(
       questionText,
@@ -10,52 +10,57 @@ class BodyWidgets {
   }
 
   static BodyWidget createQuestion(String label, String shorthand) {
-    return BodyWidget(shorthand, TextFormField(
-      decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          constraints: const BoxConstraints(maxWidth: 150),
-          label: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white70,
-            ),
-          )),
-    ));
+    return BodyWidget(
+        shorthand,
+        TextFormField(
+          decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              constraints: const BoxConstraints(maxWidth: 150),
+              label: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.white70,
+                ),
+              )),
+        ));
   }
 
-  static BodyWidget createDoubleQuestion(String firstLabel, String secondLabel, String shorthand) {
-    return BodyWidget(shorthand, Row(children: <Widget>[
-      Flexible(
-        flex: 0,
-        // First Name Form Field
-        child: TextFormField(
-          decoration: InputDecoration(
-            label: Text(
-              firstLabel,
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+  static BodyWidget createDoubleQuestion(
+      String firstLabel, String secondLabel, String shorthand) {
+    return BodyWidget(
+        shorthand,
+        Row(children: <Widget>[
+          Flexible(
+            flex: 0,
+            // First Name Form Field
+            child: TextFormField(
+              decoration: InputDecoration(
+                label: Text(
+                  firstLabel,
+                  style: const TextStyle(fontSize: 12, color: Colors.white70),
+                ),
+                border: const UnderlineInputBorder(),
+                constraints: const BoxConstraints(maxWidth: 150),
+              ),
             ),
-            border: const UnderlineInputBorder(),
-            constraints: const BoxConstraints(maxWidth: 150),
           ),
-        ),
-      ),
-      const Spacer(),
-      Flexible(
-        flex: 10,
-        // Last Name Form Field
-        child: TextFormField(
-          decoration: InputDecoration(
-            label: Text(
-              secondLabel,
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+          const Spacer(),
+          Flexible(
+            flex: 10,
+            // Last Name Form Field
+            child: TextFormField(
+              decoration: InputDecoration(
+                label: Text(
+                  secondLabel,
+                  style: const TextStyle(fontSize: 12, color: Colors.white70),
+                ),
+                border: const UnderlineInputBorder(),
+              ),
             ),
-            border: const UnderlineInputBorder(),
           ),
-        ),
-      ),
-      const Spacer(),
-    ]));
+          const Spacer(),
+        ]));
   }
 
   static BodyWidget createToggleOptions(
@@ -72,8 +77,8 @@ class BodyWidgets {
       ));
       index = index + 1;
     }
-    return BodyWidget(shorthand, StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
+    return BodyWidget(shorthand,
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
       return ToggleButtons(
         direction: Axis.horizontal,
         onPressed: (int index) {
@@ -98,9 +103,52 @@ class BodyWidgets {
     }));
   }
 
+  static BodyWidget createDropDown(List<String> options, String shorthand) {
+    String currentValue = "";
+    return BodyWidget(shorthand,
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      return DropdownButton(
+        value: currentValue,
+        items: options.map((String items) {
+          return DropdownMenuItem(
+            value: items,
+            child: Text(items),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          setState(() {
+            currentValue = newValue!;
+          });
+        },
+      );
+    }));
+  }
+
+  static BodyWidget createVerticalButton(List<String> options, double boxHeight,
+      double boxWidth, String shortHand) {
+    final ButtonStyle raised = ElevatedButton.styleFrom(
+        textStyle: const TextStyle(fontSize: 20), elevation: 20);
+    final ButtonStyle pressed = ElevatedButton.styleFrom(
+        textStyle: const TextStyle(fontSize: 20), elevation: 5);
+    ButtonStyle currentStyle = pressed;
+    return BodyWidget(shortHand,
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: options.map((buttonText) {
+            return CheckboxListTile(
+              title: Text(buttonText),
+              onChanged: (() => setState(() {
+                    currentStyle = raised;
+                  })),
+            );
+          }).toList());
+    }));
+  }
+
   static BodyWidget createIntCounter(int value, String shorthand) {
-    return BodyWidget(shorthand, StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
+    return BodyWidget(shorthand,
+        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,15 +246,16 @@ class BodyWidgets {
   }
 }
 
-class BodyWidget {
+class BodyWidget extends StatelessWidget {
   final String question;
   late dynamic response;
   final Widget widget;
-  BodyWidget(this.question, this.widget);
+  BodyWidget(this.question, this.widget, {super.key});
 
   Widget getWidget() {
     return widget;
   }
+
   String getQuestion() {
     return question;
   }
@@ -220,6 +269,7 @@ class BodyWidget {
   }
 
   @override
-  Element createElement() {
+  Widget build(BuildContext context) {
+    return getWidget();
   }
 }

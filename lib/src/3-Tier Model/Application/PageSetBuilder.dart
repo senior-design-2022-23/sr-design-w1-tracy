@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../Presentation/ProfilePages.dart';
 import '../Presentation/TemplatePage.dart';
 
-class PageBuilder {
+class PageSetBuilder {
   static final pageSet = <String, Widget>{};
 
   static Map<String, Widget> profilingPages() {
