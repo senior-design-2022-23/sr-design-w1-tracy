@@ -106,72 +106,16 @@ class DietFrequencyPage extends LogHandler {
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
   DietFrequencyPage() {
-    Widget frequencyText =
-        WidgetConstructor.createText("How often do you eat?");
-    BodyWidget frequencyFields = WidgetConstructor.createVerticalButton(
-        ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'],
-        300,
-        10,
-        "exercise");
-
+    Widget dietFreqText = WidgetConstructor.createText("How often do you eat?");
+    BodyWidget frequencyFields = WidgetConstructor.createDropDown(
+        ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
+    Widget dietFreqText = WidgetConstructor.createText("Do y?");
+    BodyWidget frequencyFields = WidgetConstructor.createDropDown(
+        ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
     bodyWidgets = [frequencyFields];
     Map<Widget?, double> spacingConfig = {
-      frequencyText: 30,
+      dietFreqText: 30,
       frequencyFields: 0,
-    };
-    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
-  }
-
-  TemplatePage getWidget() {
-    return template;
-  }
-
-  @override
-  void storeUserInfo() async {
-    var questionMap = extractQuestionResponse(bodyWidgets);
-    //Change questions to shorthand Back4App columnName
-    questionMap.forEach((question, response) {
-      ParseServer.store("UserInfo", question, response);
-    });
-  }
-}
-
-class DietFruitsPage extends LogHandler {
-  late TemplatePage template;
-  List<BodyWidget> bodyWidgets = [];
-  DietFruitsPage() {
-    Widget exerciseText = WidgetConstructor.createText(
-        "Select all of the following, if any, that you consume:");
-    BodyWidget exerciseFields = WidgetConstructor.createVerticalButton([
-      'None (0x)',
-      'Little or Rarely (1-2x)',
-      'Often (3-4x)',
-      'Frequently (5-6x)',
-      'Everyday (>=7x)'
-    ], "exercise");
-    Widget waterText = WidgetConstructor.createText(
-        "Approximately how many bottles of water do you drink a day?");
-    BodyWidget waterFields = WidgetConstructor.createDropDown([
-      'Unsure',
-      '1-2 bottles',
-      '3-4 bottles',
-      '5-6 bottles',
-      '7-8 bottles',
-      '9-10 bottles',
-      '10+ bottles',
-    ], "water");
-
-    bodyWidgets = [exerciseFields, waterFields];
-    Map<Widget?, double> spacingConfig = {
-      exerciseText: 30,
-      exerciseFields: 0,
-      waterText: 20,
-      waterFields: 0,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
     Widget finalBody = WidgetConstructor.addUXWrap(spacedList);

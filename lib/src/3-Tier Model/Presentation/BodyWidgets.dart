@@ -124,25 +124,34 @@ class WidgetConstructor {
     }));
   }
 
-  static BodyWidget createVerticalButton(List<String> options, double boxHeight,
-      double boxWidth, String shortHand) {
-    final ButtonStyle raised = ElevatedButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 20), elevation: 20);
-    final ButtonStyle pressed = ElevatedButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 20), elevation: 5);
-    ButtonStyle currentStyle = pressed;
-    return BodyWidget(shortHand,
+  static BodyWidget createCheckboxList(
+      String questionText, List<String> options, String shorthand) {
+    List<bool> isChecked = List.generate(options.length, (_) => false);
+    return BodyWidget(shorthand,
         StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: options.map((buttonText) {
-            return CheckboxListTile(
-              title: Text(buttonText),
-              onChanged: (() => setState(() {
-                    currentStyle = raised;
-                  })),
-            );
-          }).toList());
+      return ListView.builder(
+        itemCount: 1,
+        itemBuilder: (context, index) {
+          return ExpansionTile(
+            title: Text(
+              questionText,
+              style: const TextStyle(
+                  fontSize: 20, color: Color.fromARGB(255, 255, 255, 255)),
+            ),
+            children: List.generate(isChecked.length, (index) {
+              return CheckboxListTile(
+                title: Text(options[index]),
+                value: isChecked[index],
+                onChanged: (value) {
+                  setState(() {
+                    isChecked[index] = value!;
+                  });
+                },
+              );
+            }),
+          );
+        },
+      );
     }));
   }
 
