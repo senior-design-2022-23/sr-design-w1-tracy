@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/shared/continueButton.dart';
 import 'modelViewerAdapter.dart';
 
 class MigraineLocatorPage extends StatefulWidget {
@@ -16,7 +17,7 @@ class _LocatorState extends State<MigraineLocatorPage> {
       floatingActionButton: Stack(
         children: <Widget>[
           Align(
-            alignment: const Alignment(-.50, 0),
+            alignment: const Alignment(-.50, -.20),
             child: FloatingActionButton(
               onPressed: () {
                 proxy.prevModel();
@@ -25,7 +26,7 @@ class _LocatorState extends State<MigraineLocatorPage> {
             ),
           ),
           Align(
-            alignment: const Alignment(.50, 0),
+            alignment: const Alignment(.50, -.20),
             child: FloatingActionButton(
               onPressed: () {
                 proxy.nextModel();
@@ -33,6 +34,9 @@ class _LocatorState extends State<MigraineLocatorPage> {
               child: const Icon(Icons.navigate_next),
             ),
           ),
+          Align(
+              alignment: const Alignment(0, -.50),
+              child: ContinueButton(callback: () {})),
         ],
       ),
       body: proxy.createModelView(),
