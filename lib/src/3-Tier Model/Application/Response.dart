@@ -19,14 +19,3 @@ enum ResponseType {
   migraine,
 }
 
-class ResponseInterface {
-  final List<String> questions;
-  // final TemplatePage template;
-
-  ResponseInterface(this.questions);
-
-  // Subclass Implements
-  List<Response> extractResponses() {
-    throw UnimplementedError();
-  }
-}

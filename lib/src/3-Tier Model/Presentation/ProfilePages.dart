@@ -102,39 +102,39 @@ class ActivityPage extends LogHandler {
   }
 }
 
-class DietFrequencyPage extends LogHandler {
-  late TemplatePage template;
-  List<BodyWidget> bodyWidgets = [];
-  DietFrequencyPage() {
-    Widget dietFreqText = WidgetConstructor.createText("How often do you eat?");
-    BodyWidget frequencyFields = WidgetConstructor.createDropDown(
-        ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
-    Widget dietFreqText = WidgetConstructor.createText("Do y?");
-    BodyWidget frequencyFields = WidgetConstructor.createDropDown(
-        ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
-    bodyWidgets = [frequencyFields];
-    Map<Widget?, double> spacingConfig = {
-      dietFreqText: 30,
-      frequencyFields: 0,
-    };
-    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
-  }
-
-  TemplatePage getWidget() {
-    return template;
-  }
-
-  @override
-  void storeUserInfo() async {
-    var questionMap = extractQuestionResponse(bodyWidgets);
-    //Change questions to shorthand Back4App columnName
-    questionMap.forEach((question, response) {
-      ParseServer.store("UserInfo", question, response);
-    });
-  }
-}
+// class DietFrequencyPage extends LogHandler {
+//   late TemplatePage template;
+//   List<BodyWidget> bodyWidgets = [];
+//   DietFrequencyPage() {
+//     Widget dietFreqText = WidgetConstructor.createText("How often do you eat?");
+//     BodyWidget frequencyFields = WidgetConstructor.createDropDown(
+//         ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
+//     Widget dietFreqText = WidgetConstructor.createText("Do y?");
+//     BodyWidget frequencyFields = WidgetConstructor.createDropDown(
+//         ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
+//     bodyWidgets = [frequencyFields];
+//     Map<Widget?, double> spacingConfig = {
+//       dietFreqText: 30,
+//       frequencyFields: 0,
+//     };
+//     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+//     Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+//     template = TemplatePage(
+//         body: finalBody,
+//         title: "Na",
+//         buttons: [ContinueButton(callback: () {})]);
+//   }
+//
+//   TemplatePage getWidget() {
+//     return template;
+//   }
+//
+//   @override
+//   void storeUserInfo() async {
+//     var questionMap = extractQuestionResponse(bodyWidgets);
+//     //Change questions to shorthand Back4App columnName
+//     questionMap.forEach((question, response) {
+//       ParseServer.store("UserInfo", question, response);
+//     });
+//   }
+// }

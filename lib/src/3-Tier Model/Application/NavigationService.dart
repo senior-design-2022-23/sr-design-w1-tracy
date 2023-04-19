@@ -29,6 +29,6 @@ class _NavigationServiceState extends State<NavigationService> {
 
   @override
   Widget build(BuildContext context) {
-    return _currentPage;
+    return PageSetBuilder.profilingPages()['Personal Information']!;
   }
 }
