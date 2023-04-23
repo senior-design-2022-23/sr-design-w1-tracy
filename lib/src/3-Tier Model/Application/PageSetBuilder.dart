@@ -9,7 +9,7 @@ class PageSetBuilder {
   static Map<String, Widget> profilingPages() {
     PersonalInfoPage personalInfo = PersonalInfoPage();
     pageSet["Personal Information"] = personalInfo.getWidget();
-    pageSet["Personal Information"].
+    // pageSet["Personal Information"].
     // pageSet["Alcohol"] =
     //     TemplatePage(body: body, title: "Alcohol", buttons: buttons);
     // pageSet["Activity"] =
@@ -28,9 +28,9 @@ class PageSetBuilder {
     return pageSet;
   }
 
-  dailyFormPages() {}
-  statisticsPages() {}
-  authenticationPages() {}
+  // dailyFormPages() {}
+  // statisticsPages() {}
+  // authenticationPages() {}
 
   homePages() {}
 }

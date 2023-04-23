@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Application/Response.dart';
+
 class WidgetConstructor {
   static Widget createText(String questionText, {double fontSize = 20}) {
     return Text(
@@ -25,6 +27,7 @@ class WidgetConstructor {
               )),
         ));
   }
+
 
   static BodyWidget createDoubleQuestion(
       String firstLabel, String secondLabel, String shorthand) {
@@ -261,7 +264,7 @@ class WidgetConstructor {
 
 class BodyWidget extends StatelessWidget {
   final String question;
-  late dynamic response;
+  late Response response;
   final Widget widget;
   BodyWidget(this.question, this.widget, {super.key});
 

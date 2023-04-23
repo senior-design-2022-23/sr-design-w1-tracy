@@ -14,8 +14,6 @@ class ParseServer {
     return await ParseUser.currentUser();
   }
 
-
-
   static Future<ParseObject?> request(objectTable, tableColumn, info) async {
     ParseUser? user = await currentUser();
     QueryBuilder<ParseObject> queryUsers = QueryBuilder<ParseObject>(
