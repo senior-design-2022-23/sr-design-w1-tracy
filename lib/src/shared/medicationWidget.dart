@@ -45,10 +45,13 @@ class _MedicationSearchWidgetState extends State<MedicationSearchWidget> {
 
     final medications = <String>[];
     for (var row in sheet.rows) {
-      // Add a null check for the cell value
-      final cellValue = row[0]?.value;
-      if (cellValue != null) {
-        medications.add(cellValue.toString());
+      final displayNameValue = row[0]?.value;
+      final displayNameSynonymValue = row[1]?.value;
+      if (displayNameValue != null) {
+        medications.add(displayNameValue.toString());
+      }
+      if (displayNameSynonymValue != null) {
+        medications.add(displayNameSynonymValue.toString());
       }
     }
     return medications;
@@ -65,7 +68,6 @@ class _MedicationSearchWidgetState extends State<MedicationSearchWidget> {
             medication.toLowerCase().contains(_searchText.toLowerCase()))
         .toList();
 
-    // Build the widget tree
     return Column(
       children: [
         TextField(
