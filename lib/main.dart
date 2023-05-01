@@ -16,11 +16,12 @@ void main() {
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-  final NavigationService pageNavigator = NavigationService(WelcomePage());
+  final NavigationService pageNavigator =
+      const NavigationService(WelcomePage());
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: pageNavigator // Initial page upon launch
+    return MaterialApp(home: WelcomePage() // Initial page upon launch
         );
   }
 }

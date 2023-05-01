@@ -28,6 +28,21 @@ class WidgetConstructor {
         ));
   }
 
+  static Widget createButton(Function() onPressed) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        side: const BorderSide(
+            width: 1, color: Color.fromARGB(255, 255, 255, 255)),
+        minimumSize: const Size(330, 70),
+      ),
+      child: const Text(
+        "Continue",
+        style:
+            TextStyle(fontSize: 17, color: Color.fromARGB(255, 255, 255, 255)),
+      ),
+    );
+  }
 
   static BodyWidget createDoubleQuestion(
       String firstLabel, String secondLabel, String shorthand) {
@@ -107,7 +122,7 @@ class WidgetConstructor {
   }
 
   static BodyWidget createDropDown(List<String> options, String shorthand) {
-    String currentValue = "";
+    String currentValue = options.isNotEmpty ? options[0] : "";
     return BodyWidget(shorthand,
         StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
       return DropdownButton(
@@ -131,35 +146,45 @@ class WidgetConstructor {
       List<String> options, String shorthand) {
     List<bool> isChecked = List.generate(options.length, (_) => false);
     List<int> selectionList = [];
-    return BodyWidget(shorthand,
-        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      return ListView.builder(
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return ExpansionTile(
-            title: Text(
-              questionText,
-              style: const TextStyle(
-                  fontSize: 20, color: Color.fromARGB(255, 255, 255, 255)),
-            ),
-            children: List.generate(isChecked.length, (index) {
-              return CheckboxListTile(
-                title: Text(options[index]),
-                value: isChecked[index],
-                onChanged: (value) {
-                  setState(() {
-                    if (selectionLimit <=
-                        isChecked.where((element) => element).length) {
-                      isChecked[index] = value!;
-                    }
-                  });
-                },
+    return BodyWidget(
+        shorthand,
+        Transform.translate(
+            offset: const Offset(-15, 0),
+            child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ExpansionTile(
+                      title: Text(
+                        questionText,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 255, 255, 255)),
+                      ),
+                      children: List.generate(isChecked.length, (index) {
+                        return CheckboxListTile(
+                          title: Text(options[index]),
+                          value: isChecked[index],
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == true &&
+                                  selectionLimit <=
+                                      isChecked
+                                          .where((element) => element)
+                                          .length) {
+                                return;
+                              }
+                              isChecked[index] = value!;
+                            });
+                          },
+                        );
+                      }),
+                    ),
+                  ],
+                ),
               );
-            }),
-          );
-        },
-      );
-    }));
+            })));
   }
 
   static BodyWidget createIntCounter(int value, String shorthand) {
@@ -170,8 +195,9 @@ class WidgetConstructor {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Material(
-            color: Colors.transparent,
+            color: Colors.black38,
             child: IconButton(
+              iconSize: 70,
               icon: const Icon(Icons.arrow_back_ios),
               tooltip: '-1',
               onPressed: () {
@@ -185,15 +211,16 @@ class WidgetConstructor {
           ),
           Text('$value',
               style: const TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 17,
+                fontSize: 150,
               )),
           Material(
             color: Colors.transparent,
             child: IconButton(
+              iconSize: 70,
+              color: Colors.black38,
               icon: const Icon(Icons.arrow_forward_ios_outlined),
-              tooltip: '+1',
               onPressed: () {
                 setState(() {
                   if (value < 16) {
@@ -208,14 +235,14 @@ class WidgetConstructor {
     }));
   }
 
-  static Widget createBackButton(Function onPressed) {
+  static Widget createBackButton(Function() onPressed) {
     return Transform.translate(
       offset: const Offset(-20, 0),
       child: IconButton(
         color: const Color.fromARGB(255, 101, 101, 101),
         icon: const Icon(Icons.arrow_back_ios),
         tooltip: 'Back',
-        onPressed: () => onPressed(),
+        onPressed: onPressed,
       ),
     );
   }
@@ -229,18 +256,18 @@ class WidgetConstructor {
   static List<Widget> addSpacing(Map<Widget?, double> spacingBefore) {
     List<Widget> concatList = [];
     spacingBefore.forEach((widget, spacingDistance) {
-      if (widget != null) {
-        concatList.add(widget);
-      }
       if (spacingDistance > 0) {
         concatList.add(SizedBox(height: spacingDistance));
+      }
+      if (widget != null) {
+        concatList.add(widget);
       }
     });
     return concatList;
   }
 
   static Widget addUXWrap(List<Widget> bodyWidgets,
-      {Function? backLogic, String? title}) {
+      {Function()? backLogic, String? title}) {
     List<Widget> widgets = [];
     backLogic != null ? widgets.add(createBackButton(backLogic)) : null;
     title != null ? widgets.add(createTitle(title)) : null;
@@ -250,12 +277,10 @@ class WidgetConstructor {
         left: 20,
         right: 20,
       ),
-      child: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widgets,
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: widgets,
         ),
       ),
     );
