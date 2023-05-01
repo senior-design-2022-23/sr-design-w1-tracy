@@ -36,7 +36,7 @@ class TemplatePageState extends State<TemplatePage> {
             Container(
               padding: EdgeInsets.all(18),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: widget.buttons,
               ),
             ),

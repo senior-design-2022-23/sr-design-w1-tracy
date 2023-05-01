@@ -5,22 +5,26 @@ import 'package:migraine_aid/src/3-Tier%20Model/Presentation/BodyWidgets.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Presentation/TemplatePage.dart';
 import 'package:migraine_aid/src/shared/continueButton.dart';
 
+import '../Application/Adapters/modelViewerAdapter.dart';
+import '../Application/NavigationService.dart';
+
 class _TransitionPage extends LogHandler {
   final String _pageText;
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
-  _TransitionPage(this._pageText) {
+  _TransitionPage(this._pageText, NavigationController controller) {
     Widget transitionText =
         WidgetConstructor.createText(_pageText, fontSize: 50);
     Map<Widget?, double> spacingConfig = {
       transitionText: 30,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage);
     template = TemplatePage(
         body: finalBody,
         title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
+        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
   }
 
   TemplatePage getWidget() {
@@ -34,15 +38,16 @@ class _TransitionPage extends LogHandler {
 }
 
 class TransitionPageFactory {
-  static LogHandler createTransitionPage(String largeText) {
-    return _TransitionPage(largeText);
+  static Widget createTransitionPage(
+      String largeText, NavigationController navigationController) {
+    return _TransitionPage(largeText, navigationController).getWidget();
   }
 }
 
 class PersonalInfoPage extends LogHandler {
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
-  PersonalInfoPage() {
+  PersonalInfoPage(NavigationController controller) {
     Widget heightText = WidgetConstructor.createText("Height");
     BodyWidget heightFields =
         WidgetConstructor.createDoubleQuestion("ft", "in", "height");
@@ -61,11 +66,13 @@ class PersonalInfoPage extends LogHandler {
       sexOptions: 5
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage,
+        title: "Hi, let's set up your profile!");
     template = TemplatePage(
         body: finalBody,
         title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
+        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
   }
 
   TemplatePage getWidget() {
@@ -85,7 +92,7 @@ class PersonalInfoPage extends LogHandler {
 class ActivityPage extends LogHandler {
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
-  ActivityPage() {
+  ActivityPage(NavigationController controller) {
     Widget exerciseText =
         WidgetConstructor.createText("How often do you exercise?");
     BodyWidget exerciseFields = WidgetConstructor.createDropDown([
@@ -115,11 +122,12 @@ class ActivityPage extends LogHandler {
       waterFields: 0,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage, title: "Activity Questions");
     template = TemplatePage(
         body: finalBody,
         title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
+        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
   }
 
   TemplatePage getWidget() {
@@ -139,7 +147,7 @@ class ActivityPage extends LogHandler {
 class DietPage extends LogHandler {
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
-  DietPage() {
+  DietPage(NavigationController controller) {
     Widget frequencyText =
         WidgetConstructor.createText("How often do you eat?");
     BodyWidget frequencyDropdown = WidgetConstructor.createDropDown(
@@ -210,11 +218,12 @@ class DietPage extends LogHandler {
       miscChecklist: 30,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage, title: "Diet Questions");
     template = TemplatePage(
         body: finalBody,
         title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
+        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
   }
 
   TemplatePage getWidget() {
@@ -234,7 +243,7 @@ class DietPage extends LogHandler {
 class SleepPage extends LogHandler {
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
-  SleepPage() {
+  SleepPage(NavigationController controller) {
     Widget sleepText =
         WidgetConstructor.createText("How much sleep do you get on averge?");
     BodyWidget sleepCounter = WidgetConstructor.createIntCounter(7, '');
@@ -244,11 +253,12 @@ class SleepPage extends LogHandler {
       sleepCounter: 0,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage, title: "Sleep Questions");
     template = TemplatePage(
         body: finalBody,
         title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
+        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
   }
 
   TemplatePage getWidget() {
@@ -310,10 +320,96 @@ class MigraineInfoPage extends LogHandler {
   }
 }
 
+class HeadIndexManager {
+  int headIndex = 0;
+  final ModelViewerProxy proxy;
+
+  HeadIndexManager._privateConstructor(this.proxy);
+
+  static late HeadIndexManager? _instance;
+
+  static HeadIndexManager getInstance(ModelViewerProxy proxy) {
+    return _instance ??= HeadIndexManager._privateConstructor(proxy);
+  }
+}
+
+class MigraineLocationPage extends StatelessWidget with LogHandler {
+  final List<BodyWidget> bodyWidgets = [];
+  final NavigationController controller;
+  MigraineLocationPage(this.controller, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    HeadIndexManager manager = HeadIndexManager.getInstance(ModelViewerProxy());
+    var proxy = manager.proxy;
+    return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+      return Scaffold(
+        floatingActionButton: Stack(
+          children: <Widget>[
+            Align(
+              alignment: const Alignment(-.50, -.20),
+              child: FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    manager.headIndex -= 1;
+                    proxy.loadModel(manager.headIndex);
+                  });
+                },
+                child: const Icon(Icons.navigate_before),
+              ),
+            ),
+            Align(
+              alignment: const Alignment(.50, -.20),
+              child: FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    manager.headIndex += 1;
+                    proxy.loadModel(manager.headIndex);
+                  });
+                },
+                child: const Icon(Icons.navigate_next),
+              ),
+            ),
+            Align(
+                alignment: const Alignment(0, -.50),
+                child: WidgetConstructor.createButton(controller.nextPage)),
+          ],
+        ),
+        body: proxy.init(),
+      );
+    });
+  }
+
+  Widget getWidget(NavigationController controller) {
+    return MigraineLocationPage(controller);
+  }
+
+  @override
+  void storeUserInfo() async {
+    Map<String, String> modelToAttackType = {'human_head.glb': 'N/A'};
+    // Access the headIndex from HeadIndexManager
+    HeadIndexManager? manager = HeadIndexManager._instance;
+    if (manager != null) {
+      int headIndex = manager.headIndex;
+      print('Head index: $headIndex');
+      String currentModelSelected = manager.proxy.getModelName(headIndex);
+      Map<String, dynamic> qrMap = {
+        "MigraineAttackType": modelToAttackType[currentModelSelected]
+      };
+      var questionMap = qrMap;
+      // Change questions to shorthand Back4App columnName
+      questionMap.forEach((question, response) {
+        ParseServer.store("UserInfo", question, response);
+      });
+    }
+  }
+}
+
 class MedicalPage extends LogHandler {
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
-  MedicalPage() {
+  MedicalPage(NavigationController controller) {
     Widget medicationText = WidgetConstructor.createText(
         "Enter any medication you take daily or on a need-to basis. Optional dosage and frequency fields available after selecting medicine");
     BodyWidget sleepCounter = WidgetConstructor.createIntCounter(7, '');
@@ -323,11 +419,12 @@ class MedicalPage extends LogHandler {
       sleepCounter: 0,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage);
     template = TemplatePage(
         body: finalBody,
         title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
+        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
   }
 
   TemplatePage getWidget() {

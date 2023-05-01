@@ -1,6 +1,5 @@
 import "package:webview_flutter/webview_flutter.dart";
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 final List<String> models = [
   'assets/models/human_head.glb',
@@ -41,8 +40,14 @@ class ModelViewerProxy {
   void loadModel(int index) {
     index = index % models.length;
     currentAsset = models[index];
-    print(currentAsset);
     viewer = createModelView(currentAsset);
     _controller.runJavaScript("""setSrc("$currentAsset");""");
+  }
+
+  String getModelName(int index) {
+    index = index % models.length;
+    currentAsset = models[index];
+    currentAsset = currentAsset.split("/").last;
+    return currentAsset;
   }
 }
