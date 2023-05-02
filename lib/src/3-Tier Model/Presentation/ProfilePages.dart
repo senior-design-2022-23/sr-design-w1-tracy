@@ -317,7 +317,9 @@ class MedicalPage extends LogHandler {
     Widget medicationText = WidgetConstructor.createText(
         "Enter any medication you take daily or on a need-to basis. Optional dosage and frequency fields available after selecting medicine");
     BodyWidget sleepCounter = WidgetConstructor.createIntCounter(7, '');
-    bodyWidgets = [sleepCounter];
+    BodyWidget medicationSearch =
+        WidgetConstructor.createMedicationWidget('medication');
+    bodyWidgets = [sleepCounter, medicationSearch];
     Map<Widget?, double> spacingConfig = {
       medicationText: 30,
       sleepCounter: 0,
