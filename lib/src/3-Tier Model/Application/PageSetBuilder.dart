@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Presentation/DailyLogPage.dart';
 
 import '../Presentation/ProfilePages.dart';
 import '../Presentation/TemplatePage.dart';
+import 'LogHandler.dart';
 
 class PageSetBuilder {
   static final pageSet = <String, Widget>{};
@@ -28,7 +30,18 @@ class PageSetBuilder {
     return pageSet;
   }
 
-  // dailyFormPages() {}
+  dailyLogPages(NavigationController navigationController) {
+    DailyLogFactory dailyLogFactory = DailyLogFactory();
+    List<DailyLogPage> pages =
+        dailyLogFactory.createDailyLogPages(navigationController);
+    int index = 1;
+    for (var page in pages) {
+      pageSet["Daily Log Page $index"] = page.getWidget();
+      index++;
+    }
+    return pageSet;
+  }
+
   // statisticsPages() {}
   // authenticationPages() {}
 
