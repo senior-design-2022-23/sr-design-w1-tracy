@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Application/Response.dart';
+import '../Application/QuestionResponse.dart';
 
 class WidgetConstructor {
   static Widget createText(String questionText) {

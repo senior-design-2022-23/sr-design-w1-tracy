@@ -7,7 +7,8 @@ class TemplatePage extends StatefulWidget {
   final List<Widget> buttons;
 
   const TemplatePage(
-      {required this.body, required this.title, required this.buttons});
+      {required this.body, required this.title, required this.buttons}
+      );
 
   @override
   TemplatePageState createState() => TemplatePageState();

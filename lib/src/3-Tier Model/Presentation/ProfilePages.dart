@@ -10,8 +10,7 @@ class PersonalInfoPage extends LogHandler {
   List<BodyWidget> bodyWidgets = [];
   PersonalInfoPage() {
     Widget heightText = WidgetConstructor.createText("Height");
-    BodyWidget heightFields =
-        WidgetConstructor.createDoubleQuestion("ft", "in", "height");
+    BodyWidget heightFields = WidgetConstructor.createDoubleQuestion("ft", "in", "height");
     Widget widthText = WidgetConstructor.createText("Weight");
     BodyWidget widthFields = WidgetConstructor.createQuestion("lbs", "weight");
     Widget sexText = WidgetConstructor.createText("Sex");
