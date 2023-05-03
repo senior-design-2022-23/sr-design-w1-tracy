@@ -45,6 +45,7 @@ dependencies:
   model_viewer_plus:
     git: 
       url: https://github.com/rhit-battleal/model_viewer_plus.dart.git
+  fl_chart: ^0.62.0
 
 dependency_overrides:
   webview_flutter: ^4.0.7
