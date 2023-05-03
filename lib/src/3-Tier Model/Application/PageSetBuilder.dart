@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../Presentation/EmptyStatisticsPage.dart';
 import '../Presentation/ProfilePages.dart';
 import '../Presentation/TemplatePage.dart';
 import 'NavigationService.dart';
@@ -37,7 +38,12 @@ class PageSetBuilder {
     }
     return pageSet;
   }
-  // statisticsPages() {}
+  
+  static statisticsPage(NavigationController navigationController) {
+    EmptyStatisticsPage statsPage = EmptyStatisticsPage(navigationController);
+    pageSet["Empty Statistics Page"] = statsPage.getWidget();
+    return pageSet;
+  }
   // authenticationPages() {}
 
   homePages() {}

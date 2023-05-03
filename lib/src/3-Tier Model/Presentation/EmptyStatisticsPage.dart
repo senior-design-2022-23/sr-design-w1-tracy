@@ -7,10 +7,10 @@ import 'package:migraine_aid/src/3-Tier%20Model/Presentation/BodyWidgets.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Presentation/TemplatePage.dart';
 import '../Application/NavigationService.dart';
 
-class StatisticsPage extends LogHandler {
+class EmptyStatisticsPage extends LogHandler {
   late TemplatePage template;
   List<Widget> bodyWidgets = [];
-  StatisticsPage(NavigationController controller) {
+  EmptyStatisticsPage(NavigationController controller) {
 
     Widget emptyBoxDescription = WidgetConstructor.createText("Looks like you haven't logged any data just yet. Once you complete your first log or migraine attack, you will see your data here.");
     Widget backBtn = WidgetConstructor.createBackButton(() => null);

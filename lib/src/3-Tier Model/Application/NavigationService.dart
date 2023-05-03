@@ -54,6 +54,10 @@ class _NavigationServiceState extends State<NavigationService> {
     return PageSetBuilder.profilingPages(controller).values.toList();
   }
 
+  List<Widget> _createEmptyStatisticsPage() {
+    return PageSetBuilder.statisticsPage(controller).values.toList();
+  }
+
   void _nextPage() {
     if (_currentPageIndex < _pages.length - 1) {
       setState(() {
