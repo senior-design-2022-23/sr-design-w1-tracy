@@ -5,6 +5,40 @@ import 'package:migraine_aid/src/3-Tier%20Model/Presentation/BodyWidgets.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Presentation/TemplatePage.dart';
 import 'package:migraine_aid/src/shared/continueButton.dart';
 
+class _TransitionPage extends LogHandler {
+  final String _pageText;
+  late TemplatePage template;
+  List<BodyWidget> bodyWidgets = [];
+  _TransitionPage(this._pageText) {
+    Widget transitionText =
+        WidgetConstructor.createText(_pageText, fontSize: 50);
+    Map<Widget?, double> spacingConfig = {
+      transitionText: 30,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    template = TemplatePage(
+        body: finalBody,
+        title: "Na",
+        buttons: [ContinueButton(callback: () {})]);
+  }
+
+  TemplatePage getWidget() {
+    return template;
+  }
+
+  @override
+  void storeUserInfo() async {
+    UnimplementedError();
+  }
+}
+
+class TransitionPageFactory {
+  static LogHandler createTransitionPage(String largeText) {
+    return _TransitionPage(largeText);
+  }
+}
+
 class PersonalInfoPage extends LogHandler {
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
@@ -101,39 +135,210 @@ class ActivityPage extends LogHandler {
   }
 }
 
-// class DietFrequencyPage extends LogHandler {
-//   late TemplatePage template;
-//   List<BodyWidget> bodyWidgets = [];
-//   DietFrequencyPage() {
-//     Widget dietFreqText = WidgetConstructor.createText("How often do you eat?");
-//     BodyWidget frequencyFields = WidgetConstructor.createDropDown(
-//         ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
-//     Widget dietFreqText = WidgetConstructor.createText("Do y?");
-//     BodyWidget frequencyFields = WidgetConstructor.createDropDown(
-//         ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
-//     bodyWidgets = [frequencyFields];
-//     Map<Widget?, double> spacingConfig = {
-//       dietFreqText: 30,
-//       frequencyFields: 0,
-//     };
-//     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-//     Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
-//     template = TemplatePage(
-//         body: finalBody,
-//         title: "Na",
-//         buttons: [ContinueButton(callback: () {})]);
-//   }
-//
-//   TemplatePage getWidget() {
-//     return template;
-//   }
-//
-//   @override
-//   void storeUserInfo() async {
-//     var questionMap = extractQuestionResponse(bodyWidgets);
-//     //Change questions to shorthand Back4App columnName
-//     questionMap.forEach((question, response) {
-//       ParseServer.store("UserInfo", question, response);
-//     });
-//   }
-// }
+class DietPage extends LogHandler {
+  late TemplatePage template;
+  List<BodyWidget> bodyWidgets = [];
+  DietPage() {
+    Widget frequencyText =
+        WidgetConstructor.createText("How often do you eat?");
+    BodyWidget frequencyDropdown = WidgetConstructor.createDropDown(
+        ['1-2x/day', '3-4x/day', '5-6x/day', '>6x/day', 'It depends'], "");
+    List<String> fruitOptions = [
+      '1-2x/day',
+      '3-4x/day',
+      '5-6x/day',
+      '>6x/day',
+      'It depends'
+    ];
+    BodyWidget fruitChecklist = WidgetConstructor.createCheckboxList(
+        "Select any of the following fruit you regularly eat?",
+        fruitOptions.length,
+        fruitOptions,
+        "");
+    List<String> caffeineOptions = [
+      '1-2x/day',
+      '3-4x/day',
+      '5-6x/day',
+      '>6x/day',
+      'It depends'
+    ];
+    Widget caffieineText =
+        WidgetConstructor.createText("How much caffeine do you consume?");
+    BodyWidget caffeineDropdown =
+        WidgetConstructor.createDropDown(caffeineOptions, "");
+    List<String> dairyOptions = [
+      '1-2x/day',
+      '3-4x/day',
+      '5-6x/day',
+      '>6x/day',
+      'It depends'
+    ];
+    BodyWidget dairyChecklist = WidgetConstructor.createCheckboxList(
+        "Select any of the following dairy products you consume:",
+        dairyOptions.length,
+        dairyOptions,
+        "");
+    List<String> miscOptions = [
+      'Pickled Herring',
+      'Nitrites',
+      'Soy Sauce',
+      'Yeast Extract',
+      'Tenderizer',
+      'MSG',
+      'Artifical Sweetners'
+    ];
+    BodyWidget miscChecklist = WidgetConstructor.createCheckboxList(
+        "Select the following products you consume:",
+        miscOptions.length,
+        miscOptions,
+        "");
+    bodyWidgets = [
+      frequencyDropdown,
+      fruitChecklist,
+      caffeineDropdown,
+      dairyChecklist,
+      miscChecklist
+    ];
+    Map<Widget?, double> spacingConfig = {
+      frequencyText: 30,
+      frequencyDropdown: 0,
+      fruitChecklist: 30,
+      caffieineText: 30,
+      caffeineDropdown: 0,
+      dairyChecklist: 30,
+      miscChecklist: 30,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    template = TemplatePage(
+        body: finalBody,
+        title: "Na",
+        buttons: [ContinueButton(callback: () {})]);
+  }
+
+  TemplatePage getWidget() {
+    return template;
+  }
+
+  @override
+  void storeUserInfo() async {
+    var questionMap = extractQuestionResponse(bodyWidgets);
+    //Change questions to shorthand Back4App columnName
+    questionMap.forEach((question, response) {
+      ParseServer.store("UserInfo", question, response);
+    });
+  }
+}
+
+class SleepPage extends LogHandler {
+  late TemplatePage template;
+  List<BodyWidget> bodyWidgets = [];
+  SleepPage() {
+    Widget sleepText =
+        WidgetConstructor.createText("How much sleep do you get on averge?");
+    BodyWidget sleepCounter = WidgetConstructor.createIntCounter(7, '');
+    bodyWidgets = [sleepCounter];
+    Map<Widget?, double> spacingConfig = {
+      sleepText: 30,
+      sleepCounter: 0,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    template = TemplatePage(
+        body: finalBody,
+        title: "Na",
+        buttons: [ContinueButton(callback: () {})]);
+  }
+
+  TemplatePage getWidget() {
+    return template;
+  }
+
+  @override
+  void storeUserInfo() async {
+    var questionMap = extractQuestionResponse(bodyWidgets);
+    //Change questions to shorthand Back4App columnName
+    questionMap.forEach((question, response) {
+      ParseServer.store("UserInfo", question, response);
+    });
+  }
+}
+
+class MigraineInfoPage extends LogHandler {
+  late TemplatePage template;
+  List<BodyWidget> bodyWidgets = [];
+  MigraineInfoPage() {
+    Widget lengthText =
+        WidgetConstructor.createText("How long do your migraines last?");
+    BodyWidget lengthCounter = WidgetConstructor.createQuestion('hrs', '');
+    Widget frequencyText =
+        WidgetConstructor.createText("How often do you have migraines?");
+    BodyWidget frequencyCounter = WidgetConstructor.createQuestion('week', '');
+    Widget timeText = WidgetConstructor.createText(
+        "What time of day do your migraines usually occur?");
+    BodyWidget timeDropdown =
+        WidgetConstructor.createDropDown(["Morning", "Evening", "Night"], '');
+    bodyWidgets = [lengthCounter, frequencyCounter, timeDropdown];
+    Map<Widget?, double> spacingConfig = {
+      lengthText: 30,
+      lengthCounter: 0,
+      frequencyText: 30,
+      frequencyCounter: 0,
+      timeText: 30,
+      timeDropdown: 0,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    template = TemplatePage(
+        body: finalBody,
+        title: "Na",
+        buttons: [ContinueButton(callback: () {})]);
+  }
+
+  TemplatePage getWidget() {
+    return template;
+  }
+
+  @override
+  void storeUserInfo() async {
+    var questionMap = extractQuestionResponse(bodyWidgets);
+    //Change questions to shorthand Back4App columnName
+    questionMap.forEach((question, response) {
+      ParseServer.store("UserInfo", question, response);
+    });
+  }
+}
+
+class MedicalPage extends LogHandler {
+  late TemplatePage template;
+  List<BodyWidget> bodyWidgets = [];
+  MedicalPage() {
+    Widget medicationText = WidgetConstructor.createText(
+        "Enter any medication you take daily or on a need-to basis. Optional dosage and frequency fields available after selecting medicine");
+    BodyWidget sleepCounter = WidgetConstructor.createIntCounter(7, '');
+    bodyWidgets = [sleepCounter];
+    Map<Widget?, double> spacingConfig = {
+      medicationText: 30,
+      sleepCounter: 0,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
+    template = TemplatePage(
+        body: finalBody,
+        title: "Na",
+        buttons: [ContinueButton(callback: () {})]);
+  }
+
+  TemplatePage getWidget() {
+    return template;
+  }
+
+  @override
+  void storeUserInfo() async {
+    var questionMap = extractQuestionResponse(bodyWidgets);
+    //Change questions to shorthand Back4App columnName
+    questionMap.forEach((question, response) {
+      ParseServer.store("UserInfo", question, response);
+    });
+  }
+}

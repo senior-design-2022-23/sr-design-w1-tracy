@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../Application/QuestionResponse.dart';
 
 class WidgetConstructor {
-  static Widget createText(String questionText) {
+  static Widget createText(String questionText, {double fontSize = 20}) {
     return Text(
       questionText,
-      style: const TextStyle(
-          fontSize: 20, color: Color.fromARGB(255, 255, 255, 255)),
+      style: TextStyle(
+          fontSize: fontSize, color: const Color.fromARGB(255, 255, 255, 255)),
     );
   }
 
@@ -127,9 +127,10 @@ class WidgetConstructor {
     }));
   }
 
-  static BodyWidget createCheckboxList(
-      String questionText, List<String> options, String shorthand) {
+  static BodyWidget createCheckboxList(String questionText, int selectionLimit,
+      List<String> options, String shorthand) {
     List<bool> isChecked = List.generate(options.length, (_) => false);
+    List<int> selectionList = [];
     return BodyWidget(shorthand,
         StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
       return ListView.builder(
@@ -147,7 +148,10 @@ class WidgetConstructor {
                 value: isChecked[index],
                 onChanged: (value) {
                   setState(() {
-                    isChecked[index] = value!;
+                    if (selectionLimit <=
+                        isChecked.where((element) => element).length) {
+                      isChecked[index] = value!;
+                    }
                   });
                 },
               );
