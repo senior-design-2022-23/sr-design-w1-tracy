@@ -326,10 +326,11 @@ class HeadIndexManager {
 
   HeadIndexManager._privateConstructor(this.proxy);
 
-  static late HeadIndexManager? _instance;
+  static HeadIndexManager? _instance;
 
   static HeadIndexManager getInstance(ModelViewerProxy proxy) {
-    return _instance ??= HeadIndexManager._privateConstructor(proxy);
+    _instance ??= HeadIndexManager._privateConstructor(proxy);
+    return _instance!;
   }
 }
 
@@ -348,7 +349,7 @@ class MigraineLocationPage extends StatelessWidget with LogHandler {
         floatingActionButton: Stack(
           children: <Widget>[
             Align(
-              alignment: const Alignment(-.50, -.20),
+              alignment: const Alignment(-.70, .20),
               child: FloatingActionButton(
                 onPressed: () {
                   setState(() {
@@ -360,7 +361,7 @@ class MigraineLocationPage extends StatelessWidget with LogHandler {
               ),
             ),
             Align(
-              alignment: const Alignment(.50, -.20),
+              alignment: const Alignment(.80, .20),
               child: FloatingActionButton(
                 onPressed: () {
                   setState(() {
@@ -372,8 +373,9 @@ class MigraineLocationPage extends StatelessWidget with LogHandler {
               ),
             ),
             Align(
-                alignment: const Alignment(0, -.50),
-                child: WidgetConstructor.createButton(controller.nextPage)),
+                alignment: const Alignment(0.5, 1),
+                child: WidgetConstructor.createButton(controller.nextPage,
+                    color: const Color.fromARGB(255, 109, 144, 67))),
           ],
         ),
         body: proxy.init(),
