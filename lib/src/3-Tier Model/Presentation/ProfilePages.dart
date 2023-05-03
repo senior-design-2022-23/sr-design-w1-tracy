@@ -411,22 +411,21 @@ class MigraineLocationPage extends StatelessWidget with LogHandler {
 class MedicalPage extends LogHandler {
   late TemplatePage template;
   List<BodyWidget> bodyWidgets = [];
-  MedicalPage(NavigationController controller) {
+  MedicalPage() {
     Widget medicationText = WidgetConstructor.createText(
         "Enter any medication you take daily or on a need-to basis. Optional dosage and frequency fields available after selecting medicine");
-    BodyWidget sleepCounter = WidgetConstructor.createIntCounter(7, '');
-    bodyWidgets = [sleepCounter];
+    BodyWidget medicationSearch =
+        WidgetConstructor.createMedicationWidget('medication');
+    bodyWidgets = [medicationSearch];
     Map<Widget?, double> spacingConfig = {
       medicationText: 30,
-      sleepCounter: 0,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
-        backLogic: controller.previousPage);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
     template = TemplatePage(
         body: finalBody,
         title: "Na",
-        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+        buttons: [ContinueButton(callback: () {})]);
   }
 
   TemplatePage getWidget() {
