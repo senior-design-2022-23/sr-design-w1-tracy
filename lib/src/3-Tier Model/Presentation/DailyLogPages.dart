@@ -6,7 +6,7 @@ import 'package:migraine_aid/src/3-Tier%20Model/Presentation/TemplatePage.dart';
 import 'package:migraine_aid/src/shared/continueButton.dart';
 
 import '../Application/NavigationService.dart';
-import '../Application/QuestionResponse.dart';
+import '../Application/Response.dart';
 
 class DailyLogFactory {
   late TemplatePage template;
@@ -98,15 +98,13 @@ class DailyLogPage extends LogHandler {
   List<Map<Widget, double>> spacingConfigs = [];
   DailyLogPage(NavigationController controller,
       Map<Widget, double> spacingConfig, int index) {
-    List<Question> questions = getQuestionInfo();
-    List<List<Widget>> pageWidgets = createPageSet(questions);
     List<Widget> spacedList =
         WidgetConstructor.addSpacing(spacingConfigs[index]);
     Widget finalBody;
     if (index == 0) {
       finalBody = WidgetConstructor.addUXWrap(
         spacedList,
-        backLogic: controller.homePage,
+        backLogic: () {},
         title: 'Daily Log',
       );
     } else {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../Presentation/DailyLogPages.dart';
 import '../Presentation/ProfilePages.dart';
 import '../Presentation/TemplatePage.dart';
 import 'NavigationService.dart';

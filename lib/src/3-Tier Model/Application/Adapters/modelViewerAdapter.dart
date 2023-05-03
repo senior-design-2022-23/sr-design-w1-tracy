@@ -3,7 +3,10 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 final List<String> models = [
   'assets/models/human_head.glb',
-  'assets/models/tension.glb'
+  'assets/models/tension.glb',
+  'assets/models/Cluster.glb',
+  'assets/models/Migraine.glb',
+  'assets/models/Post_Tramatic.glb'
 ];
 
 class ModelViewerProxy {
