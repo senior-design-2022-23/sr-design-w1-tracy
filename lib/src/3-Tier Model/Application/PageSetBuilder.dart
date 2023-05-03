@@ -26,7 +26,17 @@ class PageSetBuilder {
     return pageSet;
   }
 
-  // dailyFormPages() {}
+  dailyLogPages(NavigationController navigationController) {
+    DailyLogFactory dailyLogFactory = DailyLogFactory();
+    List<DailyLogPage> pages =
+        dailyLogFactory.createDailyLogPages(navigationController);
+    int index = 1;
+    for (var page in pages) {
+      pageSet["Daily Log Page $index"] = page.getWidget();
+      index++;
+    }
+    return pageSet;
+  }
   // statisticsPages() {}
   // authenticationPages() {}
 
