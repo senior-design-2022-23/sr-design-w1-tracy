@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 
 import '../Application/Response.dart';
@@ -184,6 +186,103 @@ class WidgetConstructor {
                 ),
               );
             })));
+  }
+
+  static BodyWidget createMedicationWidget(String shorthand) {
+    return BodyWidget(shorthand, StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        String searchText = '';
+        List<String> selectedItems = [];
+
+        // Define a function to update the search text and suggestions
+        void updateSearchText(String searchText) {
+          setState(() {
+            searchText = searchText;
+          });
+        }
+
+        // Define a function to handle selecting a suggestion
+        void onSuggestionSelected(String suggestion) {
+          setState(() {
+            if (selectedItems.contains(suggestion)) {
+              selectedItems.remove(suggestion);
+            } else {
+              selectedItems.add(suggestion);
+            }
+            searchText = '';
+          });
+        }
+
+        List<String> getMedications() {
+          final file = File('assets/libraries/MedicationLists.xlsx');
+          final bytes = file.readAsBytesSync();
+          final excel = Excel.decodeBytes(bytes);
+          final sheet = excel.tables['Sheet1'];
+
+          if (sheet == null) {
+            return [];
+          }
+
+          final medications = <String>[];
+          for (var row in sheet.rows) {
+            final displayNameValue = row[0]?.value;
+            final displayNameSynonymValue = row[1]?.value;
+            if (displayNameValue != null) {
+              medications.add(displayNameValue.toString());
+            }
+            if (displayNameSynonymValue != null) {
+              medications.add(displayNameSynonymValue.toString());
+            }
+          }
+          return medications;
+        }
+
+        // Get the list of medications from the Excel file
+        List<String> medications = getMedications();
+
+        // Filter the medications based on the search text
+        List<String> suggestions = medications
+            .where((medication) =>
+                medication.toLowerCase().contains(searchText.toLowerCase()))
+            .toList();
+
+        // Build the widget tree
+        return Column(
+          children: [
+            TextField(
+              onChanged: updateSearchText,
+              decoration: const InputDecoration(
+                labelText: 'Search Medications',
+              ),
+            ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField(
+              value: null,
+              items: suggestions
+                  .map((suggestion) => DropdownMenuItem(
+                        value: suggestion,
+                        child: Text(suggestion),
+                      ))
+                  .toList(),
+              onChanged: (value) => onSuggestionSelected(value!),
+              decoration: const InputDecoration(
+                labelText: 'Medications',
+              ),
+              isDense: true,
+              isExpanded: true,
+              selectedItemBuilder: (BuildContext context) {
+                return selectedItems.map<Widget>((String item) {
+                  return Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(item),
+                  );
+                }).toList();
+              },
+            ),
+          ],
+        );
+      },
+    ));
   }
 
   static BodyWidget createIntCounter(int value, String shorthand) {
