@@ -34,9 +34,9 @@ class TemplatePageState extends State<TemplatePage> {
               child: widget.body,
             ),
             Container(
-              padding: EdgeInsets.all(18),
+              padding: const EdgeInsets.all(18),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: widget.buttons,
               ),
             ),

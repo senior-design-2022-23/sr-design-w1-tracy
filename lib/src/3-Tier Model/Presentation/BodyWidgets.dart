@@ -28,18 +28,17 @@ class WidgetConstructor {
         ));
   }
 
-  static Widget createButton(Function() onPressed) {
+  static Widget createButton(Function() onPressed,
+      {Color color = Colors.white}) {
     return OutlinedButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
-        side: const BorderSide(
-            width: 1, color: Color.fromARGB(255, 255, 255, 255)),
+        side: BorderSide(width: 1, color: color),
         minimumSize: const Size(330, 70),
       ),
-      child: const Text(
+      child: Text(
         "Continue",
-        style:
-            TextStyle(fontSize: 17, color: Color.fromARGB(255, 255, 255, 255)),
+        style: TextStyle(fontSize: 17, color: color),
       ),
     );
   }
@@ -268,7 +267,7 @@ class WidgetConstructor {
 
   static Widget addUXWrap(List<Widget> bodyWidgets,
       {Function()? backLogic, String? title}) {
-    List<Widget> widgets = [];
+    List<Widget> widgets = [const SizedBox(height: 40)];
     backLogic != null ? widgets.add(createBackButton(backLogic)) : null;
     title != null ? widgets.add(createTitle(title)) : null;
     widgets = widgets + bodyWidgets;

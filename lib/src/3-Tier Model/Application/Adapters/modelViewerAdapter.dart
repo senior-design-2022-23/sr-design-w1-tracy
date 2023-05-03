@@ -7,7 +7,7 @@ final List<String> models = [
 ];
 
 class ModelViewerProxy {
-  String currentAsset = models[1];
+  String currentAsset = models[0];
   late WebViewController _controller;
   late ModelViewer viewer;
 
