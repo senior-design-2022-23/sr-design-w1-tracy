@@ -4,34 +4,74 @@ import 'package:flutter/material.dart';
 
 import '../Application/Response.dart';
 
+// Static constructor for initializing consistent page widgets
 class WidgetConstructor {
+  // Creates a string of Text
   static Widget createText(String questionText, {double fontSize = 20}) {
+    if (questionText.isEmpty) {
+      throw ArgumentError('Question text must not be null or empty.');
+    }
     return Text(
       questionText,
       style: TextStyle(
-          fontSize: fontSize, color: const Color.fromARGB(255, 255, 255, 255)),
+        fontSize: fontSize,
+        color: const Color.fromARGB(255, 255, 255, 255),
+      ),
     );
   }
 
-  static BodyWidget createQuestion(String label, String shorthand) {
+  // Body Widget for a singular Text Field per question
+  static BodyWidget createQuestion(String label, String shorthand,
+      {Function(String)? nameValidator}) {
+    if (label.isEmpty) {
+      throw ArgumentError('Label must not be null or empty.');
+    }
+    if (shorthand.isEmpty) {
+      throw ArgumentError('Shorthand must not be null or empty.');
+    }
+
     return BodyWidget(
-        shorthand,
-        TextFormField(
-          decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              constraints: const BoxConstraints(maxWidth: 150),
-              label: Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.white70,
-                ),
-              )),
-        ));
+      shorthand,
+      TextFormField(
+        decoration: InputDecoration(
+          border: const UnderlineInputBorder(),
+          constraints: const BoxConstraints(),
+          labelText: label,
+          labelStyle: const TextStyle(
+            fontSize: 12,
+            color: Colors.white70,
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter some text.';
+          }
+          // Call the nameValidator function and return the result
+          return nameValidator != null ? nameValidator(value) : null;
+        },
+      ),
+    );
   }
 
+  // Creates an Image widget
+  static Widget createImage(String imageAsset,
+      {double width = 350, double height = 275, BoxFit boxFit = BoxFit.cover}) {
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(150),
+        child: Image.asset(
+          imageAsset,
+          width: width,
+          height: height,
+          fit: boxFit,
+        ),
+      ),
+    );
+  }
+
+  // Creates a large button for page navigation
   static Widget createButton(Function() onPressed,
-      {Color color = Colors.white}) {
+      {String text = "Continue", Color color = Colors.white}) {
     return OutlinedButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
@@ -39,14 +79,16 @@ class WidgetConstructor {
         minimumSize: const Size(330, 70),
       ),
       child: Text(
-        "Continue",
+        text,
         style: TextStyle(fontSize: 17, color: color),
       ),
     );
   }
 
+  // Body Widget for 2 Text Fields in the same column per question
   static BodyWidget createDoubleQuestion(
-      String firstLabel, String secondLabel, String shorthand) {
+      String firstLabel, String secondLabel, String shorthand,
+      {Function(String)? firstValidator, Function(String)? secondValidator}) {
     return BodyWidget(
         shorthand,
         Row(children: <Widget>[
@@ -62,6 +104,13 @@ class WidgetConstructor {
                 border: const UnderlineInputBorder(),
                 constraints: const BoxConstraints(maxWidth: 150),
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text.';
+                }
+                // Call the nameValidator function and return the result
+                return firstValidator != null ? firstValidator(value) : null;
+              },
             ),
           ),
           const Spacer(),
@@ -76,12 +125,20 @@ class WidgetConstructor {
                 ),
                 border: const UnderlineInputBorder(),
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text.';
+                }
+                // Call the nameValidator function and return the result
+                return secondValidator != null ? secondValidator(value) : null;
+              },
             ),
           ),
           const Spacer(),
         ]));
   }
 
+  // Body Widget for small set of toggleable options
   static BodyWidget createToggleOptions(
       int selectedOptionIndex, List<String> optionsList, String shorthand) {
     var booleanList = <bool>[];
@@ -122,6 +179,7 @@ class WidgetConstructor {
     }));
   }
 
+  // Body Widget for a singular selected option per question
   static BodyWidget createDropDown(List<String> options, String shorthand) {
     String currentValue = options.isNotEmpty ? options[0] : "";
     return BodyWidget(shorthand,
@@ -143,6 +201,7 @@ class WidgetConstructor {
     }));
   }
 
+  // Body Widget for variable # of options selected per question
   static BodyWidget createCheckboxList(String questionText, int selectionLimit,
       List<String> options, String shorthand) {
     List<bool> isChecked = List.generate(options.length, (_) => false);
@@ -188,6 +247,7 @@ class WidgetConstructor {
             })));
   }
 
+  // Body widget for searching list of strings
   static BodyWidget createMedicationWidget(String shorthand) {
     return BodyWidget(shorthand, StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
@@ -285,54 +345,70 @@ class WidgetConstructor {
     ));
   }
 
-  static BodyWidget createIntCounter(int value, String shorthand) {
-    return BodyWidget(shorthand,
-        StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Material(
-            color: Colors.black38,
-            child: IconButton(
-              iconSize: 70,
-              icon: const Icon(Icons.arrow_back_ios),
-              tooltip: '-1',
-              onPressed: () {
-                setState(() {
-                  if (value > 3) {
-                    value -= 1;
-                  }
-                });
-              },
-            ),
-          ),
-          Text('$value',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 150,
-              )),
-          Material(
-            color: Colors.transparent,
-            child: IconButton(
-              iconSize: 70,
-              color: Colors.black38,
-              icon: const Icon(Icons.arrow_forward_ios_outlined),
-              onPressed: () {
-                setState(() {
-                  if (value < 16) {
-                    value += 1;
-                  }
-                });
-              },
-            ),
-          ),
-        ],
-      );
-    }));
+  // Body widget for strictly numerical responses
+  static BodyWidget createIntCounter(
+    int value,
+    String shorthand, {
+    int minValue = 0,
+    int maxValue = 100,
+    int increment = 1,
+    int decrement = 1,
+  }) {
+    return BodyWidget(
+      shorthand,
+      StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Material(
+                color: Colors.transparent,
+                child: IconButton(
+                  color: Colors.black38,
+                  iconSize: 70,
+                  icon: const Icon(Icons.arrow_back_ios),
+                  tooltip: '-$decrement',
+                  onPressed: () {
+                    setState(() {
+                      if (value - decrement >= minValue) {
+                        value -= decrement;
+                      }
+                    });
+                  },
+                ),
+              ),
+              Text(
+                '$value',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 150,
+                ),
+              ),
+              Material(
+                color: Colors.transparent,
+                child: IconButton(
+                  iconSize: 70,
+                  color: Colors.black38,
+                  icon: const Icon(Icons.arrow_forward_ios_outlined),
+                  onPressed: () {
+                    setState(() {
+                      if (value + increment <= maxValue) {
+                        value += increment;
+                      }
+                    });
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
+  // A unique header button for back navigation
   static Widget createBackButton(Function() onPressed) {
     return Transform.translate(
       offset: const Offset(-20, 0),
@@ -345,12 +421,14 @@ class WidgetConstructor {
     );
   }
 
+  // A unique header title
   static Widget createTitle(String text) {
     return Text(text,
         style: const TextStyle(
             fontSize: 30, color: Color.fromARGB(255, 255, 255, 255)));
   }
 
+  // Adds empty spaced widgets between body widgets
   static List<Widget> addSpacing(Map<Widget?, double> spacingBefore) {
     List<Widget> concatList = [];
     spacingBefore.forEach((widget, spacingDistance) {
@@ -364,6 +442,7 @@ class WidgetConstructor {
     return concatList;
   }
 
+  // Wraps spaced widgets with a header, padding, and a scrollable view
   static Widget addUXWrap(List<Widget> bodyWidgets,
       {Function()? backLogic, String? title}) {
     List<Widget> widgets = [const SizedBox(height: 40)];
@@ -385,6 +464,7 @@ class WidgetConstructor {
   }
 }
 
+// Extended Flutter Widgets - Autonomously control their own state
 class BodyWidget extends StatelessWidget {
   final String question;
   late Response response;

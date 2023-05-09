@@ -33,11 +33,20 @@ class TemplatePageState extends State<TemplatePage> {
             Expanded(
               child: widget.body,
             ),
-            Container(
-              padding: const EdgeInsets.all(18),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.buttons,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: const EdgeInsets.all(18),
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing:
+                        8, // Adjust the spacing between buttons horizontally
+                    runSpacing:
+                        8, // Adjust the spacing between buttons vertically
+                    alignment: WrapAlignment.center,
+                    children: widget.buttons,
+                  ),
+                ),
               ),
             ),
           ],

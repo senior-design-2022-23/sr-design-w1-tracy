@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Presentation/AuthenticationPages.dart';
 
 import '../Presentation/DailyLogPages.dart';
 import '../Presentation/ProfilePages.dart';
-import '../Presentation/TemplatePage.dart';
 import 'NavigationService.dart';
 
 class PageSetBuilder {
-  static final pageSet = <String, Widget>{};
-
   static Map<String, Widget> profilingPages(
       NavigationController navigationController) {
+    Map<String, Widget> pageSet = {};
     PersonalInfoPage personalInfo = PersonalInfoPage(navigationController);
     pageSet["Personal Information"] = personalInfo.getWidget();
     pageSet["Activity Transition"] = TransitionPageFactory.createTransitionPage(
@@ -28,6 +27,7 @@ class PageSetBuilder {
   }
 
   dailyLogPages(NavigationController navigationController) {
+    Map<String, Widget> pageSet = {};
     DailyLogFactory dailyLogFactory = DailyLogFactory();
     List<DailyLogPage> pages =
         dailyLogFactory.createDailyLogPages(navigationController);
@@ -38,8 +38,22 @@ class PageSetBuilder {
     }
     return pageSet;
   }
-  // statisticsPages() {}
-  // authenticationPages() {}
 
-  homePages() {}
+  static Map<String, Widget> authenticationPages(
+      NavigationController navigationController) {
+    Map<String, Widget> pageSet = {};
+    WelcomePage welcome = WelcomePage(navigationController);
+    pageSet["Welcome"] = welcome.getWidget();
+    SignInPage signIn = SignInPage(navigationController);
+    pageSet["Sign In"] = signIn.getWidget();
+    SignUpPage signUp = SignUpPage(navigationController);
+    pageSet["Sign Up"] = signUp.getWidget();
+    return pageSet;
+  }
+
+  static Map<String, Widget> homePages(
+      NavigationController navigationController) {
+    Map<String, Widget> pageSet = {};
+    return pageSet;
+  }
 }
