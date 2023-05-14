@@ -419,6 +419,7 @@ class MedicalPage extends LogHandler {
     bodyWidgets = [medicationSearch];
     Map<Widget?, double> spacingConfig = {
       medicationText: 30,
+      medicationSearch: 30,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
     Widget finalBody = WidgetConstructor.addUXWrap(spacedList,

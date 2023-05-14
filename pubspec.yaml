@@ -47,6 +47,7 @@ dependencies:
       url: https://github.com/rhit-battleal/model_viewer_plus.dart.git
   excel: ^2.1.0
   percent_indicator: ^4.0.1
+  multiple_search_selection: ^2.5.2
 
 dependency_overrides:
   webview_flutter: ^4.0.7
@@ -81,6 +82,7 @@ flutter:
     - assets/models/Migraine.glb
     - assets/models/Post_Tramatic.glb
     - assets/images/logo.png
+    - assets/libraries/MedicationList.xlsx
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
