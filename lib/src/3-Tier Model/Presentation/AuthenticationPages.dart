@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Page;
 
 import '../Application/NavigationService.dart';
+import '../Application/PageSetBuilder.dart';
 import 'BodyWidgets.dart';
 import 'TemplatePage.dart';
 
-class WelcomePage {
-  late TemplatePage template;
+class WelcomePage extends Page {
   List<BodyWidget> bodyWidgets = [];
   WelcomePage(NavigationController controller) {
     Widget subheaderText =
@@ -25,22 +25,15 @@ class WelcomePage {
     template = TemplatePage(
         body: finalBody, title: "Na", buttons: [signInButton, signUpButton]);
   }
-
-  TemplatePage getWidget() {
-    return template;
-  }
 }
 
-class SignInPage {
-  late TemplatePage template;
+class SignInPage extends Page {
   List<BodyWidget> bodyWidgets = [];
   SignInPage(NavigationController controller) {
     Widget usernameText = WidgetConstructor.createText("Username");
-    BodyWidget usernameField =
-        WidgetConstructor.createQuestion(" ", "username");
+    BodyWidget usernameField = WidgetConstructor.createQuestion(" ");
     Widget passwordText = WidgetConstructor.createText("Password");
-    BodyWidget passwordFields =
-        WidgetConstructor.createQuestion(" ", "password");
+    BodyWidget passwordFields = WidgetConstructor.createQuestion(" ");
 
     Widget continueButton =
         WidgetConstructor.createButton(controller.toProfling, text: "Continue");
@@ -60,26 +53,20 @@ class SignInPage {
     template = TemplatePage(
         body: finalBody, title: "Na", buttons: [continueButton, googleButton]);
   }
-
-  TemplatePage getWidget() {
-    return template;
-  }
 }
 
-class SignUpPage {
-  late TemplatePage template;
+class SignUpPage extends Page {
   List<BodyWidget> bodyWidgets = [];
   SignUpPage(NavigationController controller) {
     Widget nameText = WidgetConstructor.createText("Name");
-    BodyWidget nameFields = WidgetConstructor.createDoubleQuestion(
-        "First Name", "Second Name", "name");
+    BodyWidget nameFields =
+        WidgetConstructor.createDoubleQuestion("First Name", "Second Name");
     Widget emailText = WidgetConstructor.createText("Email");
-    BodyWidget emailField = WidgetConstructor.createQuestion(" ", "email");
+    BodyWidget emailField = WidgetConstructor.createQuestion(" ");
     Widget passwordText = WidgetConstructor.createText("Password");
-    BodyWidget passwordField =
-        WidgetConstructor.createQuestion(" ", "password");
+    BodyWidget passwordField = WidgetConstructor.createQuestion(" ");
     Widget confirmText = WidgetConstructor.createText("Confirm Password");
-    BodyWidget confirmField = WidgetConstructor.createQuestion(" ", "password");
+    BodyWidget confirmField = WidgetConstructor.createQuestion(" ");
 
     Widget continueButton = WidgetConstructor.createText("Continue");
     Widget returningButton = WidgetConstructor.createText("Returning User");
@@ -102,9 +89,5 @@ class SignUpPage {
         body: finalBody,
         title: "Na",
         buttons: [continueButton, returningButton]);
-  }
-
-  TemplatePage getWidget() {
-    return template;
   }
 }

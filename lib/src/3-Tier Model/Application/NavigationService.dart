@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Application/LogHandler.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Application/PageSetBuilder.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Presentation/ProfilePages.dart';
 
 class NavigationService extends StatefulWidget {
-  final Widget initialPage;
-  const NavigationService(this.initialPage);
+  const NavigationService({super.key});
 
   @override
   _NavigationServiceState createState() => _NavigationServiceState();
@@ -28,25 +29,6 @@ class NavigationController {
     required this.toSignIn,
     required this.toHome,
   });
-}
-
-class PageSets {
-  NavigationController navigationController;
-  late Map<String, Widget> authenticationSet;
-  late Map<String, Widget> profilingSet;
-  PageSets(this.navigationController) {
-    authenticationSet =
-        PageSetBuilder.authenticationPages(navigationController);
-    profilingSet = PageSetBuilder.profilingPages(navigationController);
-  }
-
-  get authenticationList {
-    return authenticationSet.values.toList();
-  }
-
-  get profilingList {
-    return profilingSet.values.toList();
-  }
 }
 
 class CustomLinearProgressPainter extends CustomPainter {
@@ -140,12 +122,17 @@ class _NavigationServiceState extends State<NavigationService>
   );
   late final Animation<double> _whiteBarAnimation;
   late NavigationController controller;
-  late PageSets pageSets;
+  late PageSet _currentPageSet; // Current page specificed by nav controller
+  PageSetController pageSetController = PageSetController();
   bool showProgressBar = false; // Progress switch controlled by page sets
   double maxProgress = 0; // Furthest progress reached by user
   int _currentPageIndex = 0; // Index controlled by nav contoller
-  List<Widget> _currentLinearSet =
-      []; // Current page specificed by nav controller
+
+  void initPageSets() {
+    pageSetController.createAuthenticationSet(controller);
+    pageSetController.createHomeSet(controller);
+    pageSetController.createProfilingSet(controller);
+  }
 
   @override
   void initState() {
@@ -163,8 +150,8 @@ class _NavigationServiceState extends State<NavigationService>
       toSignUp: _toSignUp,
       toSignIn: _toSignIn,
     );
-    pageSets = PageSets(controller);
-    _currentLinearSet = pageSets.authenticationList;
+    initPageSets();
+    _currentPageSet = pageSetController.authentication;
   }
 
   @override
@@ -173,7 +160,7 @@ class _NavigationServiceState extends State<NavigationService>
       Navigator(
         pages: [
           MaterialPage(
-            child: _currentLinearSet[_currentPageIndex],
+            child: _currentPageSet.widgets[_currentPageIndex],
             key: ValueKey(_currentPageIndex),
           ),
         ],
@@ -201,7 +188,7 @@ class _NavigationServiceState extends State<NavigationService>
   }
 
   double _progressValue() {
-    double current = _currentPageIndex / (_currentLinearSet.length - 1);
+    double current = _currentPageIndex / (_currentPageSet.widgets.length - 1);
     maxProgress = max(maxProgress, current);
     return maxProgress;
   }
@@ -210,7 +197,7 @@ class _NavigationServiceState extends State<NavigationService>
     setState(() {
       showProgressBar = true;
       _currentPageIndex = 0;
-      _currentLinearSet = pageSets.profilingList;
+      _currentPageSet = pageSetController.profiling;
     });
   }
 
@@ -218,7 +205,7 @@ class _NavigationServiceState extends State<NavigationService>
     setState(() {
       showProgressBar = false;
       _currentPageIndex = 0;
-      _currentLinearSet = pageSets.authenticationList;
+      _currentPageSet = pageSetController.authentication;
     });
   }
 
@@ -226,7 +213,7 @@ class _NavigationServiceState extends State<NavigationService>
     setState(() {
       showProgressBar = false;
       _currentPageIndex = 0;
-      _currentLinearSet = pageSets.authenticationList;
+      _currentPageSet = pageSetController.authentication;
     });
   }
 
@@ -234,7 +221,7 @@ class _NavigationServiceState extends State<NavigationService>
     setState(() {
       showProgressBar = false;
       _currentPageIndex = 2;
-      _currentLinearSet = pageSets.authenticationList;
+      _currentPageSet = pageSetController.authentication;
     });
   }
 
@@ -242,20 +229,27 @@ class _NavigationServiceState extends State<NavigationService>
     setState(() {
       showProgressBar = false;
       _currentPageIndex = 1;
-      _currentLinearSet = pageSets.authenticationList;
+      _currentPageSet = pageSetController.authentication;
     });
   }
 
   void _nextPage() {
-    if (_currentPageIndex < _currentLinearSet.length - 1) {
+    if (_currentPageIndex < _currentPageSet.widgets.length - 1) {
       setState(() {
+        var currentPage = _currentPageSet.pages[_currentPageIndex];
+        if (currentPage is LogHandler) {
+          (currentPage as LogHandler).setResponses();
+        }
         _currentPageIndex++;
+        if (currentPage is ConfirmationPage) {
+          pageSetController.profiling.compileResponses();
+        }
       });
     }
     _progressController.animateTo(_progressValue(),
         duration: const Duration(milliseconds: 1000));
     _whiteBarController.animateTo(
-        _currentPageIndex / (_currentLinearSet.length - 1),
+        _currentPageIndex / (_currentPageSet.widgets.length - 1),
         duration: const Duration(milliseconds: 1000));
   }
 
@@ -268,7 +262,7 @@ class _NavigationServiceState extends State<NavigationService>
     _progressController.animateTo(_progressValue(),
         duration: const Duration(milliseconds: 1000));
     _whiteBarController.animateTo(
-        _currentPageIndex / (_currentLinearSet.length - 1),
+        _currentPageIndex / (_currentPageSet.widgets.length - 1),
         duration: const Duration(milliseconds: 1000));
   }
 
