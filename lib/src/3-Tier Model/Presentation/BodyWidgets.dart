@@ -1,8 +1,12 @@
+
 import 'dart:io';
 import 'dart:math';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:multiple_search_selection/multiple_search_selection.dart';
 
 import '../Application/Response.dart';
 
@@ -336,94 +340,105 @@ class WidgetConstructor {
     String searchText = '';
     BodyWidget widget = BodyWidget(StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
-        List<String> selectedItems = [];
-        // Define a function to update the search text and suggestions
-        void updateSearchText(String searchText) {
-          setState(() {
-            searchText = searchText;
-          });
+        String excelFilePath = 'assets/libraries/MedicationList.xlsx';
+        List<String> medications = [];
+        List<bool> checkedStates = [];
+
+        Future<void> readExcelFile() async {
+          ByteData byteData = await rootBundle.load(excelFilePath);
+          List<int> bytes = byteData.buffer
+              .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
+          var excel = Excel.decodeBytes(bytes);
+          medications = [];
+          checkedStates = [];
+          for (var row in excel.tables[excel.tables.keys.first]!.rows.skip(1)) {
+            var value = row[0]?.value;
+            if (value != null) {
+              medications.add(value.toString());
+              checkedStates.add(false);
+            }
+          }
         }
 
-        // Define a function to handle selecting a suggestion
-        void onSuggestionSelected(String suggestion) {
-          setState(() {
-            if (selectedItems.contains(suggestion)) {
-              selectedItems.remove(suggestion);
+        Widget buildMedicationSearchWidget() {
+          return MultipleSearchSelection<String>(
+            title: const Padding(
+              padding: EdgeInsets.all(12.0),
+            ),
+            onItemAdded: (c) {},
+            showClearSearchFieldButton: true,
+            items: medications, // List<String>
+            fieldToCheck: (name) {
+              return name;
+            },
+            itemBuilder: (med, index) {
+              return Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 20.0,
+                      horizontal: 12,
+                    ),
+                    child: Text(med),
+                  ),
+                ),
+              );
+            },
+            pickedItemBuilder: (med) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(med),
+                ),
+              );
+            },
+            sortShowedItems: true,
+            sortPickedItems: true,
+            selectAllButton: const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Select All',
+                ),
+              ),
+            ),
+            clearAllButton: const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Clear All',
+                ),
+              ),
+            ),
+            caseSensitiveSearch: false,
+            fuzzySearch: FuzzySearch.none,
+            itemsVisibility: ShowedItemsVisibility.alwaysOn,
+            showSelectAllButton: false,
+            maximumShowItemsHeight: 200,
+          );
+        }
+
+        return FutureBuilder<void>(
+          future: readExcelFile(),
+          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Error loading medication data'));
             } else {
-              selectedItems.add(suggestion);
+              return buildMedicationSearchWidget();
             }
-            searchText = '';
-          });
-        }
-
-        List<String> getMedications() {
-          final file = File('assets/libraries/MedicationList.xlsx');
-          print(file);
-          final bytes = file.readAsBytesSync();
-          final excel = Excel.decodeBytes(bytes);
-          final sheet = excel.tables['Sheet1'];
-
-          if (sheet == null) {
-            return [];
-          }
-
-          final medications = <String>[];
-          for (var row in sheet.rows) {
-            final displayNameValue = row[0]?.value;
-            final displayNameSynonymValue = row[1]?.value;
-            if (displayNameValue != null) {
-              medications.add(displayNameValue.toString());
-            }
-            if (displayNameSynonymValue != null) {
-              medications.add(displayNameSynonymValue.toString());
-            }
-          }
-          return medications;
-        }
-
-        // Get the list of medications from the Excel file
-        List<String> medications = getMedications();
-
-        // Filter the medications based on the search text
-        List<String> suggestions = medications
-            .where((medication) =>
-                medication.toLowerCase().contains(searchText.toLowerCase()))
-            .toList();
-
-        // Build the widget tree
-        return Column(
-          children: [
-            TextField(
-              onChanged: updateSearchText,
-              decoration: const InputDecoration(
-                labelText: 'Search Medications',
-              ),
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField(
-              value: null,
-              items: suggestions
-                  .map((suggestion) => DropdownMenuItem(
-                        value: suggestion,
-                        child: Text(suggestion),
-                      ))
-                  .toList(),
-              onChanged: (value) => onSuggestionSelected(value!),
-              decoration: const InputDecoration(
-                labelText: 'Medications',
-              ),
-              isDense: true,
-              isExpanded: true,
-              selectedItemBuilder: (BuildContext context) {
-                return selectedItems.map<Widget>((String item) {
-                  return Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(item),
-                  );
-                }).toList();
-              },
-            ),
-          ],
+          },
         );
       },
     ));
