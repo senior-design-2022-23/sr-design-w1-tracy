@@ -20,6 +20,7 @@ class NavigationController {
   Function() toSignUp;
   Function() toSignIn;
   Function() toHome;
+  Function() toDailyLog;
   NavigationController({
     required this.nextPage,
     required this.previousPage,
@@ -28,6 +29,7 @@ class NavigationController {
     required this.toSignUp,
     required this.toSignIn,
     required this.toHome,
+    required this.toDailyLog,
   });
 }
 
@@ -132,6 +134,7 @@ class _NavigationServiceState extends State<NavigationService>
     pageSetController.createAuthenticationSet(controller);
     pageSetController.createHomeSet(controller);
     pageSetController.createProfilingSet(controller);
+    pageSetController.createDailyLogSet(controller);
   }
 
   @override
@@ -149,6 +152,7 @@ class _NavigationServiceState extends State<NavigationService>
       toProfling: _toProfiling,
       toSignUp: _toSignUp,
       toSignIn: _toSignIn,
+      toDailyLog: _toDailyLog,
     );
     initPageSets();
     _currentPageSet = pageSetController.authentication;
@@ -233,6 +237,15 @@ class _NavigationServiceState extends State<NavigationService>
     });
   }
 
+  void  _toDailyLog() {
+    setState(() {
+      showProgressBar = false;
+      _currentPageIndex = 0;
+      _currentPageSet = pageSetController.dailyLog;
+    });
+    
+  }
+
   void _nextPage() {
     if (_currentPageIndex < _currentPageSet.widgets.length - 1) {
       setState(() {
@@ -243,6 +256,7 @@ class _NavigationServiceState extends State<NavigationService>
         _currentPageIndex++;
         if (currentPage is ConfirmationPage) {
           pageSetController.profiling.compileResponses();
+          print(currentPage.responses);
         }
       });
     }
@@ -271,4 +285,6 @@ class _NavigationServiceState extends State<NavigationService>
     _progressController.dispose();
     super.dispose();
   }
+
+
 }

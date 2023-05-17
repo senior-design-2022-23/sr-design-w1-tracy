@@ -596,4 +596,5 @@ class ConfirmationPage extends Page {
         title: "Na",
         buttons: [WidgetConstructor.createButton(controller.nextPage)]);
   }
+  
 }
