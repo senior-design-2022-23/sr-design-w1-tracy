@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'dart:math';
 import 'package:excel/excel.dart';
@@ -13,8 +12,10 @@ import '../Application/Response.dart';
 // Extended Flutter Widgets - Autonomously control their own state
 class BodyWidget extends StatelessWidget {
   final Widget widget;
+  final String? tooltip;
   late dynamic input;
-  BodyWidget(this.widget, {super.key});
+
+  BodyWidget(this.widget, {this.tooltip, Key? key}) : super(key: key);
 
   Widget getWidget() {
     return widget;
@@ -26,17 +27,48 @@ class BodyWidget extends StatelessWidget {
   }
 }
 
-// Static constructor for initializing consistent page widgets
+class ClickableTooltip extends StatefulWidget {
+  final Widget child;
+  final String message;
+
+  ClickableTooltip({required this.child, required this.message});
+
+  @override
+  _ClickableTooltipState createState() => _ClickableTooltipState();
+}
+
+class _ClickableTooltipState extends State<ClickableTooltip> {
+  final GlobalKey _tooltipKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        final dynamic tooltip = _tooltipKey.currentState;
+        tooltip?.ensureTooltipVisible();
+      },
+      child: Tooltip(
+        key: _tooltipKey,
+        message: widget.message,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
+// Static constructor for initializing consistent page widgetsa
 class WidgetConstructor {
-  // Creates a string of Text
+  // Creates a string of Text with a tooltip icon at the end
   static Widget createText(String questionText,
-      {double fontSize = 25,
+      {String? tooltip,
+      double fontSize = 25,
       Color fontColor = Colors.white,
       TextAlign align = TextAlign.start}) {
     if (questionText.isEmpty) {
       throw ArgumentError('Question text must not be null or empty.');
     }
-    return Text(
+
+    Widget textWidget = Text(
       questionText,
       textAlign: align,
       style: TextStyle(
@@ -44,6 +76,28 @@ class WidgetConstructor {
         color: fontColor,
       ),
     );
+
+    if (tooltip != null) {
+      textWidget = Builder(
+        builder: (BuildContext context) => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              questionText,
+              style: TextStyle(
+                fontSize: fontSize,
+                color: fontColor,
+              ),
+            ),
+            ClickableTooltip(
+              message: tooltip,
+              child: Icon(Icons.info_outline, size: fontSize, color: fontColor),
+            ),
+          ],
+        ),
+      );
+    }
+    return textWidget;
   }
 
   // Body Widget for a singular Text Field per question

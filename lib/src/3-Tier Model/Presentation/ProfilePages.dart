@@ -38,7 +38,9 @@ class TransitionPageFactory {
 class PersonalInfoPage extends Page with LogHandler {
   PersonalInfoPage(NavigationController controller) {
     createQuestions();
-    Widget heightText = WidgetConstructor.createText("Height");
+    Widget heightText = WidgetConstructor.createText("Height",
+        tooltip: "Enter your height in feet and inches");
+
     BodyWidget heightFields =
         WidgetConstructor.createDoubleQuestion("ft", "in");
     Widget widthText = WidgetConstructor.createText("Weight");
@@ -414,11 +416,7 @@ class MigraineSelector extends StatelessWidget {
   bool _isLoading = true;
 
   MigraineSelector(this.controller, this.question, {Key? key}) {
-    print("setting" + currentMigraineType);
-    print("QuestionResponse object in constructor: ${question.hashCode}");
-
     question.setResponse(currentMigraineType);
-    print(question.response);
   }
 
   @override
@@ -487,23 +485,22 @@ class MigraineSelector extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             proxy.init(),
-            if (_isLoading)
-              Container(
-                  child: TemplatePage(
-                      body: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            WidgetConstructor.createText(
-                                "Generating 3D Models"),
-                            WidgetConstructor.createText("Please Wait..."),
-                            const SizedBox(height: 30),
-                            const CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 10,
-                            )
-                          ]),
-                      title: "",
-                      buttons: const [])),
+            _isLoading
+                ? TemplatePage(
+                    body: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          WidgetConstructor.createText("Generating 3D Models"),
+                          WidgetConstructor.createText("Please Wait..."),
+                          const SizedBox(height: 30),
+                          const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 10,
+                          )
+                        ]),
+                    title: "",
+                    buttons: const [])
+                : Container(),
           ],
         ),
       );
