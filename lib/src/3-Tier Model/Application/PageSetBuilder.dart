@@ -49,9 +49,6 @@ class PageSet {
         });
       }
     });
-    
-    print(setResponses.toString());
-
     return setResponses;
   }
 }
@@ -83,8 +80,8 @@ class PageSetController {
   createDailySet(NavigationController navigationController) {
     dailyLog = PageSet(navigationController);
     List<Page> pages = [];
-
-    pages.add(DailyLogFlow(navigationController));
+    var factory = DailyLogFlow(navigationController).pages;
+    pages.add(factory[0]);
     dailyLog.setPages(pages);
 
     return dailyLog;
@@ -115,6 +112,4 @@ class PageSetController {
       }
     });
   }
-
-  void createDailyLogSet(NavigationController controller) {}
 }

@@ -134,7 +134,7 @@ class _NavigationServiceState extends State<NavigationService>
     pageSetController.createAuthenticationSet(controller);
     pageSetController.createHomeSet(controller);
     pageSetController.createProfilingSet(controller);
-    pageSetController.createDailyLogSet(controller);
+    pageSetController.createDailySet(controller);
   }
 
   @override
@@ -237,13 +237,12 @@ class _NavigationServiceState extends State<NavigationService>
     });
   }
 
-  void  _toDailyLog() {
+  void _toDailyLog() {
     setState(() {
       showProgressBar = false;
       _currentPageIndex = 0;
       _currentPageSet = pageSetController.dailyLog;
     });
-    
   }
 
   void _nextPage() {
@@ -256,7 +255,6 @@ class _NavigationServiceState extends State<NavigationService>
         _currentPageIndex++;
         if (currentPage is ConfirmationPage) {
           pageSetController.profiling.compileResponses();
-          print(currentPage.responses);
         }
       });
     }
@@ -285,6 +283,4 @@ class _NavigationServiceState extends State<NavigationService>
     _progressController.dispose();
     super.dispose();
   }
-
-
 }
