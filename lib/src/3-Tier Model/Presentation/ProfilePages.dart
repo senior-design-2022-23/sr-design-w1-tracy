@@ -135,7 +135,7 @@ class ActivityPage extends Page with LogHandler {
 
   void createQuestions() {
     questions.add(QuestionResponse(
-        UserInputType.text, "Excercise Frequency", "excerciseFreq"));
+        UserInputType.text, "Excercise Frequency", "excerciseFreq",));
     questions.add(QuestionResponse(UserInputType.text,
         "Typical Excercise Intensity", "excerciseIntensity"));
     questions.add(QuestionResponse(

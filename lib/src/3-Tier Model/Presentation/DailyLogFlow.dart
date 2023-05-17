@@ -15,10 +15,9 @@ class DailyLogFlow extends Page with LogHandler {
   NavigationController controller;
 
   DailyLogFlow(this.controller) {
-    int _currQuestion = 0;
-    List<String> _answers = List<String>.filled(0, '');
+    List<String> _answers = [];
     populateQuestions();
-
+    createTransitionPage();
   }
 
   void createTransitionPage() {
@@ -34,11 +33,11 @@ class DailyLogFlow extends Page with LogHandler {
   
   void populateQuestions() {
     questions.add(
-        QuestionResponse(UserInputType.text, "Medications", "medications", questionText: "How many hours did you sleep last night?"));
+        QuestionResponse(UserInputType.numeric, "Medications", "medications", questionText: "How many hours did you sleep last night?"));
     questions.add(
         QuestionResponse(UserInputType.text, "Medications", "medications", questionText: "How many meals did you consume yesterday?"));
     questions.add(
-        QuestionResponse(UserInputType.text, "Medications", "medications", questionText: "How many hours of exercise did you complete?"));    
+        QuestionResponse(UserInputType.numeric, "Medications", "medications", questionText: "How many hours of exercise did you complete?"));    
     
     setQuestions(questions);
   }

@@ -258,6 +258,10 @@ class _NavigationServiceState extends State<NavigationService>
           pageSetController.profiling.compileResponses();
           print(currentPage.responses);
         }
+        if (_currentPageIndex == _currentPageSet.widgets.length - 2) {
+          List<String> res = pageSetController.dailyLog.compileResponses();
+          print(res);
+        }
       });
     }
     _progressController.animateTo(_progressValue(),

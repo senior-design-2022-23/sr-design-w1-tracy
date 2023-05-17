@@ -83,8 +83,9 @@ class PageSetController {
   createDailySet(NavigationController navigationController) {
     dailyLog = PageSet(navigationController);
     List<Page> pages = [];
-
-    pages.add(DailyLogFlow(navigationController));
+    DailyLogFlow dlf = DailyLogFlow(navigationController);
+    
+    pages.add(dlf.pages[0]);
     dailyLog.setPages(pages);
 
     return dailyLog;
