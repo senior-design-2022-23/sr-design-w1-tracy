@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Application/LogHandler.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Presentation/AuthenticationPages.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Presentation/DailyLogFlow.dart';
 
 import '../Presentation/DailyLogPages.dart';
 import '../Presentation/ProfilePages.dart';
@@ -48,6 +49,9 @@ class PageSet {
         });
       }
     });
+    
+    print(setResponses.toString());
+
     return setResponses;
   }
 }
@@ -56,6 +60,7 @@ class PageSetController {
   late PageSet authentication;
   late PageSet profiling;
   late PageSet home;
+  late PageSet dailyLog;
   PageSet createProfilingSet(NavigationController navigationController) {
     profiling = PageSet(navigationController);
     List<Page> pages = [];
@@ -75,18 +80,15 @@ class PageSetController {
     return profiling;
   }
 
-  // createDailySet(NavigationController navigationController) {
-  //   Map<String, Widget> pageSet = {};
-  //   DailyLogFactory dailyLogFactory = DailyLogFactory();
-  //   List<DailyLogPage> pages =
-  //       dailyLogFactory.createDailyLogPages(navigationController);
-  //   int index = 1;
-  //   for (var page in pages) {
-  //     pageSet["Daily Log Page $index"] = page.getWidget();
-  //     index++;
-  //   }
-  //   return pageSet;
-  // }
+  createDailySet(NavigationController navigationController) {
+    dailyLog = PageSet(navigationController);
+    List<Page> pages = [];
+
+    pages.add(DailyLogFlow(navigationController));
+    dailyLog.setPages(pages);
+
+    return dailyLog;
+  }
 
   PageSet createAuthenticationSet(NavigationController navigationController) {
     authentication = PageSet(navigationController);
@@ -113,4 +115,6 @@ class PageSetController {
       }
     });
   }
+
+  void createDailyLogSet(NavigationController controller) {}
 }

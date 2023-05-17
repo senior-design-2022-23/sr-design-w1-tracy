@@ -8,9 +8,10 @@ class QuestionResponse {
   final String logKey; // Used to reference the question's column in Back4App
   final bool
       isNullable; // Determines whether the response can be return as null
+  final String? questionText; // A string that is the questions displayed to the user
   final String? units; // Optional: units attached to response text
   QuestionResponse(this.type, this.referenceName, this.logKey,
-      {this.isNullable = true, this.units});
+      {this.isNullable = true, this.units, this.questionText});
   late dynamic responseValue;
 
   get response {
