@@ -36,7 +36,7 @@ class SignInPage extends Page {
     BodyWidget passwordFields = WidgetConstructor.createQuestion(" ");
 
     Widget continueButton =
-        WidgetConstructor.createButton(controller.toProfling, text: "Continue");
+        WidgetConstructor.createButton(controller.nextPage, text: "Continue");
     Widget googleButton =
         WidgetConstructor.createButton(() {}, text: "Sign In with Google");
 

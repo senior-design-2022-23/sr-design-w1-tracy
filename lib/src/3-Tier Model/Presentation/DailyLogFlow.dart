@@ -10,79 +10,60 @@ import '../Application/Adapters/modelViewerAdapter.dart';
 import '../Application/NavigationService.dart';
 import '../Application/PageSetBuilder.dart';
 
-class DailyLogFlow extends Page with LogHandler {
+class DailyLogFlow {
   List<Page> pages = [];
+  List<QuestionResponse> questions = [];
+  List<BodyWidget> bodyWidgets = [];
+  List<Widget> widgets = [];
   NavigationController controller;
 
   DailyLogFlow(this.controller) {
-    List<String> _answers = [];
-    populateQuestions();
-    createTransitionPage();
+    createTransitionPages();
   }
 
-  void createTransitionPage() {
-    for(int i=0; i<questions.length; i+3) {
-      List<QuestionResponse> qrs = [questions[i]];
-        if(questions.length < i + 1) {
-          qrs.add(questions[i+1]);
-          qrs.add(questions[i+2]);
-        }
-        pages.add(_IndividualLogPage(qrs, controller));
+  void createTransitionPages() {
+    populateQuestions();
+    createBodyWidgets();
+
+    var pageIndex = 0;
+    while ((widgets.length - pageIndex * 6) % 6 == 0 &&
+        (widgets.length - pageIndex * 6) >= 6) {
+      List<Widget> widgetSubset =
+          widgets.sublist(pageIndex * 6, pageIndex * 6 + 6);
+      pages.add(_IndividualLogPage([], widgetSubset, controller));
+      pageIndex += 1;
     }
   }
-  
+
   void populateQuestions() {
-    questions.add(
-        QuestionResponse(UserInputType.numeric, "Medications", "medications", questionText: "How many hours did you sleep last night?"));
-    questions.add(
-        QuestionResponse(UserInputType.text, "Medications", "medications", questionText: "How many meals did you consume yesterday?"));
-    questions.add(
-        QuestionResponse(UserInputType.numeric, "Medications", "medications", questionText: "How many hours of exercise did you complete?"));    
-    
-    setQuestions(questions);
-  }
-
-}
-
-class _IndividualLogPage extends Page with LogHandler {
-
-  List<QuestionResponse> qr;
-  List<Widget> allWidgets = [];
-
-  _IndividualLogPage(this.qr, NavigationController controller) {
-    Map<Widget?, double> spacingConfig = {
-      allWidgets[0]: 30,
-      allWidgets[1]: 0,
-      allWidgets[2]: 30,
-      allWidgets[3]: 0,
-      allWidgets[4]: 30,
-      allWidgets[5]: 0,
-    };
-    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
-        backLogic: controller.previousPage);
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+    questions.add(QuestionResponse(
+        UserInputType.text, "Medications", "medications",
+        questionText: "How many hours did you sleep last night?"));
+    questions.add(QuestionResponse(
+        UserInputType.text, "Medications", "medications",
+        questionText: "How many meals did you consume yesterday?"));
+    questions.add(QuestionResponse(
+        UserInputType.text, "Medications", "medications",
+        questionText: "How many hours of exercise did you complete?"));
   }
 
   void createBodyWidgets() {
-    qr.forEach((widget) {
-      switch(widget.type) {
+    questions.forEach((question) {
+      print(question.questionText);
+      switch (question.type) {
         case UserInputType.text:
-          allWidgets.add(WidgetConstructor.createText(widget.questionText!));
-          var q =  WidgetConstructor.createQuestion("");
-          allWidgets.add(q);
+          widgets.add(WidgetConstructor.createText(question.questionText!));
+          var q = WidgetConstructor.createQuestion("Enter Text Here");
+          widgets.add(q);
           bodyWidgets.add(q);
           break;
         case UserInputType.numeric:
-          allWidgets.add(WidgetConstructor.createText(widget.questionText!));
-          var q =  WidgetConstructor.createQuestion("");
-          allWidgets.add(q);
+          widgets.add(WidgetConstructor.createText(question.questionText!));
+          var q = WidgetConstructor.createQuestion("Enter Here");
+          widgets.add(q);
           bodyWidgets.add(q);
           break;
-        case UserInputType.toggle: 
+        case UserInputType.toggle:
           // TODO: Handle this case.
           break;
         case UserInputType.list:
@@ -100,5 +81,27 @@ class _IndividualLogPage extends Page with LogHandler {
       }
     });
   }
+}
 
+class _IndividualLogPage extends Page {
+  List<Widget> pageWidgets;
+  List<BodyWidget> bodyWidgets = [];
+  _IndividualLogPage(
+      this.bodyWidgets, this.pageWidgets, NavigationController controller) {
+    Map<Widget?, double> spacingConfig = {
+      pageWidgets[0]: 30,
+      pageWidgets[1]: 0,
+      pageWidgets[2]: 30,
+      pageWidgets[3]: 0,
+      pageWidgets[4]: 30,
+      pageWidgets[5]: 0,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage);
+    template = TemplatePage(
+        body: finalBody,
+        title: "Na",
+        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+  }
 }
