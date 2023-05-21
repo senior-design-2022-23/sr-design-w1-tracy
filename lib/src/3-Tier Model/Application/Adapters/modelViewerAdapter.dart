@@ -29,7 +29,7 @@ class ModelViewerProxy {
       src: src,
       skyboxImage: "assets/images/Background.png",
       alt: "Base Head",
-      exposure: .5,
+      exposure: 1,
       autoRotate: true,
       cameraControls: true,
       // disableTap: true,
@@ -38,43 +38,11 @@ class ModelViewerProxy {
       onWebViewCreated: (WebViewController controller) {
         _controller = controller;
       },
-      innerModelViewerHtml: generateModelViewerScript(
-          getHotSpot("assets/models/Post_Tramatic.glb")),
       relatedJs: """
             const modelViewer = document.querySelector('#MainViewer');
-            
             function setSrc(assetPath) {
               modelViewer.src = assetPath;
             }
-
-            const lines = modelViewer.querySelectorAll('line');
-            let baseRect;
-            let hotspotsRect;
-            
-            function onResize(){
-              baseRect = modelViewer.getBoundingClientRect();
-              hotspotsRect = document.querySelector('#hotspots').getBoundingClientRect();
-            }
-
-            modelViewer.addEventListener('load', () => {
-              onResize();
-              // update svg
-              function drawLine(svgLine, name) {
-                const hotspot = modelViewer.queryHotspot('hotspot-' + name);
-                svgLine.setAttribute('x1', hotspot.canvasPosition.x);
-                svgLine.setAttribute('y1', hotspot.canvasPosition.y);
-                svgLine.setAttribute('x2', (hotspotsRect.left + hotspotsRect.right) / 2 - baseRect.left);
-                svgLine.setAttribute('y2', hotspotsRect.top - baseRect.top);
-              }
-
-              // use requestAnimationFrame to update with renderer
-              const startSVGRenderLoop = () => {
-                drawLine(lines[0], '1');
-                requestAnimationFrame(startSVGRenderLoop);
-              };
-
-              startSVGRenderLoop();
-            });
             """,
     );
   }
@@ -91,47 +59,5 @@ class ModelViewerProxy {
     currentAsset = models[index];
     currentAsset = currentAsset.split("/").last;
     return currentAsset;
-  }
-
-  List<Map<String, String>> getHotSpot(String model) {
-    var hotspots = <Map<String, String>>[];
-    switch (model) {
-      case 'assets/models/Post_Tramatic.glb':
-        return [
-          {
-            "name": "1",
-            "dataPosition":
-                "0.0020184038193305177m 0.11406095620031625m 0.11953454203314201m"
-          }
-        ];
-      default:
-        return hotspots;
-    }
-  }
-
-  String generateModelViewerScript(List<Map<String, String>> hotspots) {
-    var anchorTags = hotspots.map((hotspot) {
-      return '<div slot="${hotspot['name']}" class="anchor" data-position="${hotspot['dataPosition']}"></div>';
-    }).join();
-
-    var lines =
-        List.generate(hotspots.length, (index) => '<line class="line"></line>')
-            .join();
-
-    var drawLines = hotspots.asMap().entries.map((entry) {
-      var index = entry.key;
-      var hotspot = entry.value;
-      return 'drawLine(lines[$index], \'${hotspot['name']}\');';
-    }).join();
-
-    return '''
-      $anchorTags
-      <svg id="lines" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" class="lineContainer">
-        $lines
-      </svg>
-      <div id="container">
-        <button id="hotspots" class="label">Hotspots</button>
-      </div>
-      ''';
   }
 }

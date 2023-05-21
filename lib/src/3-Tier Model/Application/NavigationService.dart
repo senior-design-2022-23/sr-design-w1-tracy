@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Application/LogHandler.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Application/PageSetBuilder.dart';
-import 'package:migraine_aid/src/3-Tier%20Model/Presentation/ProfilePages.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Data/ParseServerProxy.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Presentation/Pages/ProfilePages.dart';
 
 class NavigationService extends StatefulWidget {
   const NavigationService({super.key});
@@ -21,6 +22,9 @@ class NavigationController {
   Function() toSignIn;
   Function() toHome;
   Function() toDailyLog;
+  Function() toAttack;
+  Function() toStatistics;
+  Function() refresh;
   NavigationController({
     required this.nextPage,
     required this.previousPage,
@@ -30,6 +34,9 @@ class NavigationController {
     required this.toSignIn,
     required this.toHome,
     required this.toDailyLog,
+    required this.toAttack,
+    required this.toStatistics,
+    required this.refresh,
   });
 }
 
@@ -135,6 +142,7 @@ class _NavigationServiceState extends State<NavigationService>
     pageSetController.createHomeSet(controller);
     pageSetController.createProfilingSet(controller);
     pageSetController.createDailySet(controller);
+    pageSetController.createAttackSet(controller);
   }
 
   @override
@@ -145,15 +153,19 @@ class _NavigationServiceState extends State<NavigationService>
       end: 1.0,
     ).animate(_whiteBarController);
     controller = NavigationController(
-      nextPage: _nextPage,
-      previousPage: _previousPage,
-      toWelcome: _toWelcome,
-      toHome: _toHome,
-      toProfling: _toProfiling,
-      toSignUp: _toSignUp,
-      toSignIn: _toSignIn,
-      toDailyLog: _toDailyLog,
-    );
+        nextPage: _nextPage,
+        previousPage: _previousPage,
+        toWelcome: _toWelcome,
+        toHome: _toHome,
+        toProfling: _toProfiling,
+        toSignUp: _toSignUp,
+        toSignIn: _toSignIn,
+        toDailyLog: _toDailyLog,
+        toAttack: _toAttack,
+        toStatistics: _toStatistics,
+        refresh: () {
+          setState(() {});
+        });
     initPageSets();
     _currentPageSet = pageSetController.authentication;
   }
@@ -198,10 +210,12 @@ class _NavigationServiceState extends State<NavigationService>
   }
 
   void _toProfiling() {
+    ParseServer.createIfNotExists("ProfilingInformation");
     setState(() {
       showProgressBar = true;
       _currentPageIndex = 0;
       _currentPageSet = pageSetController.profiling;
+      updatePage();
     });
   }
 
@@ -210,6 +224,7 @@ class _NavigationServiceState extends State<NavigationService>
       showProgressBar = false;
       _currentPageIndex = 0;
       _currentPageSet = pageSetController.authentication;
+      updatePage();
     });
   }
 
@@ -217,7 +232,8 @@ class _NavigationServiceState extends State<NavigationService>
     setState(() {
       showProgressBar = false;
       _currentPageIndex = 0;
-      _currentPageSet = pageSetController.authentication;
+      _currentPageSet = pageSetController.home;
+      updatePage();
     });
   }
 
@@ -226,6 +242,7 @@ class _NavigationServiceState extends State<NavigationService>
       showProgressBar = false;
       _currentPageIndex = 2;
       _currentPageSet = pageSetController.authentication;
+      updatePage();
     });
   }
 
@@ -234,28 +251,44 @@ class _NavigationServiceState extends State<NavigationService>
       showProgressBar = false;
       _currentPageIndex = 1;
       _currentPageSet = pageSetController.authentication;
+      updatePage();
     });
   }
 
   void _toDailyLog() {
     setState(() {
-      showProgressBar = false;
+      showProgressBar = true;
       _currentPageIndex = 0;
       _currentPageSet = pageSetController.dailyLog;
+      updatePage();
+      _progressController.reset();
+      _whiteBarController.reset();
+    });
+  }
+
+  void _toAttack() {
+    setState(() {
+      showProgressBar = true;
+      _currentPageIndex = 0;
+      _currentPageSet = pageSetController.attack;
+      updatePage();
+    });
+  }
+
+  void _toStatistics() {
+    setState(() {
+      showProgressBar = true;
+      _currentPageIndex = 2;
+      _currentPageSet = pageSetController.home;
+      updatePage();
     });
   }
 
   void _nextPage() {
     if (_currentPageIndex < _currentPageSet.widgets.length - 1) {
       setState(() {
-        var currentPage = _currentPageSet.pages[_currentPageIndex];
-        if (currentPage is LogHandler) {
-          (currentPage as LogHandler).setResponses();
-        }
         _currentPageIndex++;
-        if (currentPage is ConfirmationPage) {
-          pageSetController.profiling.compileResponses();
-        }
+        updatePage();
       });
     }
     _progressController.animateTo(_progressValue(),
@@ -269,6 +302,7 @@ class _NavigationServiceState extends State<NavigationService>
     if (_currentPageIndex > 0) {
       setState(() {
         _currentPageIndex--;
+        updatePage();
       });
     }
     _progressController.animateTo(_progressValue(),
@@ -276,6 +310,29 @@ class _NavigationServiceState extends State<NavigationService>
     _whiteBarController.animateTo(
         _currentPageIndex / (_currentPageSet.widgets.length - 1),
         duration: const Duration(milliseconds: 1000));
+  }
+
+  // Controls individual page logic after any navigation call
+  Future<void> updatePage() async {
+    var currentPage = _currentPageSet.pages[_currentPageIndex];
+    if (_currentPageIndex != 0) {
+      var previousPage = _currentPageSet.pages[_currentPageIndex - 1];
+      if (currentPage is MenstruationInformation) {
+        var response = await ParseServer.request("ProfileInformation", "Sex");
+        if (response != null) {
+          if (response == "Female") print("object");
+        }
+      }
+      if (currentPage is ConfirmationPage) {
+        var map = pageSetController.profiling.compileResponses();
+        _currentPageSet.pages[_currentPageIndex] =
+            ConfirmationPage(controller, stats: map.toList());
+        ParseServer.store("ProfilingInformation", "profilingComplete", true);
+      }
+      if (previousPage is ConfirmationPage) {
+        pageSetController.profiling.logResponses("ProfilingInformation");
+      }
+    }
   }
 
   @override

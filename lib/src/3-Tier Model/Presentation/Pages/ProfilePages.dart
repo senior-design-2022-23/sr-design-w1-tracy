@@ -1,61 +1,62 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart' hide Page;
 import 'package:migraine_aid/src/3-Tier%20Model/Application/LogHandler.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Application/Response.dart';
 import 'package:migraine_aid/src/3-Tier%20Model/Data/ParseServerProxy.dart';
-import 'package:migraine_aid/src/3-Tier%20Model/Presentation/BodyWidgets.dart';
-import 'package:migraine_aid/src/3-Tier%20Model/Presentation/TemplatePage.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Presentation/Widgets/BodyWidgets.dart';
+import 'package:migraine_aid/src/3-Tier%20Model/Presentation/Pages/TemplatePage.dart';
 import 'package:migraine_aid/src/shared/continueButton.dart';
 
-import '../Application/Adapters/modelViewerAdapter.dart';
-import '../Application/NavigationService.dart';
-import '../Application/PageSetBuilder.dart';
+import '../../Application/Adapters/modelViewerAdapter.dart';
+import '../../Application/NavigationService.dart';
+import '../../Application/PageSetBuilder.dart';
 
-class _TransitionPage extends Page {
-  final String _pageText;
-  _TransitionPage(this._pageText, NavigationController controller) {
-    Widget transitionText = WidgetConstructor.createText(_pageText,
-        fontSize: 50, align: TextAlign.center);
-    Map<Widget?, double> spacingConfig = {
-      transitionText: 70,
-    };
-    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
-    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
-        backLogic: controller.previousPage);
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+String? validateNumerical(String input) {
+  if (input.isEmpty || input.trim() == "") return "Required Field";
+  double? number = double.tryParse(input);
+  if (number != null) {
+    if (number <= 0) return "Invalid value";
+  } else {
+    return "Numerical text only";
   }
-}
-
-class TransitionPageFactory {
-  static createTransitionPage(
-      String largeText, NavigationController navigationController) {
-    return _TransitionPage(largeText, navigationController);
-  }
+  return null;
 }
 
 class PersonalInfoPage extends Page with LogHandler {
+  late Widget heightText;
+  late BodyWidget heightFields;
+  late Widget widthText;
+  late BodyWidget widthFields;
   PersonalInfoPage(NavigationController controller) {
     createQuestions();
-    Widget heightText = WidgetConstructor.createText("Height",
-        tooltip: "Enter your height in feet and inches");
-
-    BodyWidget heightFields =
-        WidgetConstructor.createDoubleQuestion("ft", "in");
-    Widget widthText = WidgetConstructor.createText("Weight");
-    BodyWidget widthFields = WidgetConstructor.createQuestion("lbs");
+    StreamController<bool> isMetricController =
+        StreamController<bool>.broadcast();
+    createFutureWidgets(isMetricController.stream);
+    BodyWidget metricOptions = WidgetConstructor.createToggleOptions(
+        0, ['Imperial', 'Metric'], onpressed: (index) {
+      if (index == 0) isMetricController.add(false);
+      if (index == 1) isMetricController.add(true);
+    });
     Widget sexText = WidgetConstructor.createText("Sex");
     BodyWidget sexOptions =
         WidgetConstructor.createToggleOptions(0, ['N/A', 'Male', 'Female']);
     Widget dobText = WidgetConstructor.createText("Date of Birth");
     BodyWidget dobSelector = WidgetConstructor.createDatePicker();
-    bodyWidgets = [heightFields, widthFields, sexOptions, dobSelector];
+
+    bodyWidgets = [
+      heightFields,
+      widthFields,
+      metricOptions,
+      sexOptions,
+      dobSelector
+    ];
     Map<Widget?, double> spacingConfig = {
       heightText: 30,
       heightFields: 0,
       widthText: 20,
       widthFields: 0,
+      metricOptions: 10,
       sexText: 20,
       sexOptions: 5,
       dobText: 20,
@@ -65,15 +66,69 @@ class PersonalInfoPage extends Page with LogHandler {
     Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
         backLogic: controller.previousPage,
         title: "Hi, let's set up your profile!");
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+    template = TemplatePage(body: finalBody, buttons: [
+      WidgetConstructor.createButton(() {
+        if (inputsValid()) {
+          setResponses();
+          controller.nextPage();
+        }
+      })
+    ]);
+  }
+
+  void createFutureWidgets(Stream<bool> isMetric) {
+    heightText = StreamBuilder(
+        stream: isMetric,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.data == true) {
+            return WidgetConstructor.createText("Height",
+                tooltip:
+                    "Enter your height in centimeters"); // alternate widget
+          } else {
+            return WidgetConstructor.createText("Height",
+                tooltip: "Enter your height in feet and inches");
+          }
+        });
+    heightFields = WidgetConstructor.createDoubleQuestion(
+      "ft",
+      "in",
+      firstValidator: (input) {
+        return validateNumerical(input);
+      },
+      secondValidator: (input) {
+        return validateNumerical(input);
+      },
+    ).futureBuilderSwitch(
+        isMetric,
+        WidgetConstructor.createQuestion(
+          "cm",
+          inputValidator: (input) {
+            return validateNumerical(input);
+          },
+        ));
+    widthText = StreamBuilder(
+        stream: isMetric,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasData && snapshot.data == true) {
+            return WidgetConstructor.createText("Weight");
+          }
+          return WidgetConstructor.createText("Weight");
+        });
+    widthFields =
+        WidgetConstructor.createQuestion("lbs", inputValidator: (input) {
+      return validateNumerical(input);
+    }).futureBuilderSwitch(
+            isMetric,
+            WidgetConstructor.createQuestion("kg", inputValidator: (input) {
+              return validateNumerical(input);
+            }));
   }
 
   void createQuestions() {
     questions.add(QuestionResponse(UserInputType.height, "Height", "height"));
     questions.add(QuestionResponse(UserInputType.weight, "Weight", "weight"));
+    questions.add(
+        QuestionResponse(UserInputType.weight, "Unit System", "unitSystem"));
     questions.add(QuestionResponse(UserInputType.toggle, "Sex", "sex"));
     questions.add(QuestionResponse(UserInputType.date, "Date of Birth", "DOB"));
     setQuestions(questions);
@@ -89,7 +144,7 @@ class ActivityPage extends Page with LogHandler {
     createQuestions();
     Widget frequencyText = WidgetConstructor.createText(
         "How frequently do you engage in physical activity?");
-    BodyWidget frequencyFields = WidgetConstructor.createDropDown([
+    BodyWidget frequencyDropdown = WidgetConstructor.createDropDown([
       'Never',
       'Occasionally (1-2 times per week)',
       'Regularly (3-4 times per week)',
@@ -98,7 +153,7 @@ class ActivityPage extends Page with LogHandler {
     ]);
     Widget intensityText = WidgetConstructor.createText(
         "What type of physical activity intensity do you typically engage in?");
-    BodyWidget intensityFields = WidgetConstructor.createDropDown([
+    BodyWidget intensityDropdown = WidgetConstructor.createDropDown([
       'None',
       'Low intensity (e.g., walking, light yoga)',
       'Moderate intensity \n(e.g., brisk walking, light cycling)',
@@ -107,7 +162,7 @@ class ActivityPage extends Page with LogHandler {
     ]);
     Widget waterText = WidgetConstructor.createText(
         "What is your daily consumption of bottled water?");
-    BodyWidget waterFields = WidgetConstructor.createDropDown([
+    BodyWidget waterDropdown = WidgetConstructor.createDropDown([
       'Not sure',
       '1-2 bottles per day',
       '3-4 bottles per day',
@@ -117,22 +172,24 @@ class ActivityPage extends Page with LogHandler {
       'More than 10 bottles per day',
     ]);
 
-    bodyWidgets = [frequencyFields, intensityFields, waterFields];
+    bodyWidgets = [frequencyDropdown, intensityDropdown, waterDropdown];
     Map<Widget?, double> spacingConfig = {
       frequencyText: 30,
-      frequencyFields: 0,
+      frequencyDropdown: 0,
       intensityText: 30,
-      intensityFields: 0,
+      intensityDropdown: 0,
       waterText: 20,
-      waterFields: 0,
+      waterDropdown: 0,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
     Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
         backLogic: controller.previousPage, title: "Activity Questions");
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+    template = TemplatePage(body: finalBody, buttons: [
+      WidgetConstructor.createButton(() {
+        setResponses();
+        controller.nextPage();
+      })
+    ]);
   }
 
   void createQuestions() {
@@ -141,7 +198,7 @@ class ActivityPage extends Page with LogHandler {
     questions.add(QuestionResponse(UserInputType.text,
         "Typical Excercise Intensity", "excerciseIntensity"));
     questions.add(QuestionResponse(
-        UserInputType.text, "Daily Water Consumption", "waterBottles"));
+        UserInputType.text, "Daily Water Consumption", "waterConsumption"));
     setQuestions(questions);
   }
 
@@ -163,7 +220,6 @@ class DietPage extends Page with LogHandler {
       'Varies from day to day',
     ]);
     List<String> fruitOptions = [
-      'None',
       'Bananas',
       'Grapes or Raisins',
       'Citrus fruits (Oranges, Lemons, etc.)',
@@ -191,7 +247,49 @@ class DietPage extends Page with LogHandler {
         "What is your typical daily caffeine consumption?");
     BodyWidget caffeineDropdown =
         WidgetConstructor.createDropDown(caffeineOptions);
+    bodyWidgets = [
+      frequencyDropdown,
+      fruitChecklist,
+      caffeineDropdown,
+    ];
+    Map<Widget?, double> spacingConfig = {
+      frequencyText: 30,
+      frequencyDropdown: 0,
+      fruitChecklist: 30,
+      caffieineText: 30,
+      caffeineDropdown: 0,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage, title: "Diet Questions");
+    template = TemplatePage(body: finalBody, buttons: [
+      WidgetConstructor.createButton(() {
+        setResponses();
+        controller.nextPage();
+      })
+    ]);
+  }
+
+  void createQuestions() {
+    questions.add(QuestionResponse(
+        UserInputType.text, "Meal Frequency", "mealFrequency"));
+    questions.add(QuestionResponse(
+        UserInputType.text, "Fruits Eaten Regularly", "fruitConsumption"));
+    questions.add(QuestionResponse(UserInputType.text,
+        "Regular Caffiene Consumpution", "caffieneConsumpution"));
+    setQuestions(questions);
+  }
+
+  List<QuestionResponse> getQuestions() {
+    return questions;
+  }
+}
+
+class SecondDietPage extends Page with LogHandler {
+  SecondDietPage(NavigationController controller) {
+    createQuestions();
     List<String> dairyOptions = [
+      'None',
       'Cheese',
       'Yogurt',
       'Buttermilk',
@@ -224,38 +322,23 @@ class DietPage extends Page with LogHandler {
         "Which of these other food items or additives, known to potentially trigger migraines, do you regularly consume?",
         miscOptions.length,
         miscOptions);
-    bodyWidgets = [
-      frequencyDropdown,
-      fruitChecklist,
-      caffeineDropdown,
-      dairyChecklist,
-      miscChecklist
-    ];
+    bodyWidgets = [dairyChecklist, miscChecklist];
     Map<Widget?, double> spacingConfig = {
-      frequencyText: 30,
-      frequencyDropdown: 0,
-      fruitChecklist: 30,
-      caffieineText: 30,
-      caffeineDropdown: 0,
       dairyChecklist: 30,
       miscChecklist: 30,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
     Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
         backLogic: controller.previousPage, title: "Diet Questions");
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+    template = TemplatePage(body: finalBody, buttons: [
+      WidgetConstructor.createButton(() {
+        setResponses();
+        controller.nextPage();
+      })
+    ]);
   }
 
   void createQuestions() {
-    questions.add(QuestionResponse(
-        UserInputType.text, "Meal Frequency", "mealFrequency"));
-    questions.add(QuestionResponse(
-        UserInputType.text, "Fruits Eaten Regularly", "fruitsEaten"));
-    questions.add(QuestionResponse(UserInputType.text,
-        "Regular Caffiene Consumpution", "caffieneConsumpution"));
     questions.add(QuestionResponse(UserInputType.text,
         "Regular Dairy Products Consumed", "dairyConsumpution"));
     questions.add(QuestionResponse(UserInputType.text,
@@ -270,27 +353,40 @@ class DietPage extends Page with LogHandler {
 
 class SleepPage extends Page with LogHandler {
   SleepPage(NavigationController controller) {
+    createQuestions();
     Widget sleepText = WidgetConstructor.createText(
         "How much sleep do you get on average?",
         align: TextAlign.center);
     BodyWidget sleepCounter = WidgetConstructor.createIntCounter(7);
-    bodyWidgets = [sleepCounter];
+    Widget irregularText = WidgetConstructor.createText(
+        "Do you have an irregular sleep pattern?",
+        align: TextAlign.center);
+    BodyWidget irregularOptions =
+        WidgetConstructor.createToggleOptions(0, ['No', 'Yes']);
+    bodyWidgets = [sleepCounter, irregularOptions];
     Map<Widget?, double> spacingConfig = {
       sleepText: 30,
       sleepCounter: 20,
+      irregularText: 30,
+      irregularOptions: 0
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
     Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
         backLogic: controller.previousPage, title: "Sleep Questions");
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+    template = TemplatePage(body: finalBody, buttons: [
+      WidgetConstructor.createButton(() {
+        setResponses();
+        controller.nextPage();
+      })
+    ]);
   }
 
   void createQuestions() {
-    questions.add(
-        QuestionResponse(UserInputType.numeric, "Average Sleep", "avgSleep"));
+    questions.add(QuestionResponse(
+      UserInputType.numeric,
+      "Average Sleep",
+      "avgSleep",
+    ));
     questions.add(QuestionResponse(
         UserInputType.toggle, "Irregular Sleep Pattern", "irregularSleep"));
     setQuestions(questions);
@@ -302,10 +398,18 @@ class MigraineInfoPage extends Page with LogHandler {
     createQuestions();
     Widget lengthText =
         WidgetConstructor.createText("How long do your migraines last?");
-    BodyWidget lengthCounter = WidgetConstructor.createQuestion('hrs');
+    BodyWidget lengthCounter = WidgetConstructor.createQuestion(
+      'hrs',
+      inputValidator: (input) {
+        return validateNumerical(input);
+      },
+    );
     Widget frequencyText =
         WidgetConstructor.createText("How often do you have migraines?");
-    BodyWidget frequencyCounter = WidgetConstructor.createQuestion('week');
+    BodyWidget frequencyCounter =
+        WidgetConstructor.createQuestion('week(s)', inputValidator: (input) {
+      return validateNumerical(input);
+    });
     Widget timeText = WidgetConstructor.createText(
         "What time of day do your migraines usually occur?");
     BodyWidget timeDropdown =
@@ -322,9 +426,7 @@ class MigraineInfoPage extends Page with LogHandler {
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
     Widget finalBody = WidgetConstructor.addUXWrap(spacedList);
     template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [ContinueButton(callback: () {})]);
+        body: finalBody, buttons: [ContinueButton(callback: () {})]);
   }
 
   void createQuestions() {
@@ -357,8 +459,6 @@ class MigraineSelectionPage extends Page with LogHandler {
   late MigraineSelector selector;
   late String selection;
   MigraineSelectionPage(this.controller) {
-    print(
-        "_____________________________))))))))))))))))))_______________________");
     createQuestions();
     selector = MigraineSelector(controller, questions[0]);
   }
@@ -371,22 +471,17 @@ class MigraineSelectionPage extends Page with LogHandler {
   @override
   List<dynamic> collectResponses() {
     selection = questions[0].response;
-    print(
-        "----------------------------------------------------------------Selection" +
-            selection);
     return [selection];
   }
 
   void createQuestions() {
     questions.add(QuestionResponse(
         UserInputType.text, "Typical Migraine Type", "migraineType"));
-    print(
-        'Setting question to: for QuestionResponse object: ${questions[0].hashCode}');
     setQuestions(questions);
   }
 
   @override
-  void storeUserInfo() async {
+  void storeUserInfo(String className) async {
     Map<String, String> modelToAttackType = {'human_head.glb': 'N/A'};
     // Access the headIndex from HeadIndexManager
     HeadIndexManager? manager = HeadIndexManager._instance;
@@ -399,7 +494,7 @@ class MigraineSelectionPage extends Page with LogHandler {
       var questionMap = qrMap;
       // Change questions to shorthand Back4App columnName
       questionMap.forEach((question, response) {
-        ParseServer.store("UserInfo", question, response);
+        ParseServer.store(className, question, response);
       });
     }
   }
@@ -416,14 +511,14 @@ class MigraineSelector extends StatelessWidget {
   bool _isLoading = true;
 
   MigraineSelector(this.controller, this.question, {Key? key}) {
-    question.setResponse(currentMigraineType);
+    // question.setResponse(currentMigraineType);
   }
 
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
-      Future.delayed(const Duration(seconds: 7)).then((_) {
+      Future.delayed(const Duration(seconds: 2)).then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -432,10 +527,22 @@ class MigraineSelector extends StatelessWidget {
         floatingActionButton: Stack(
           children: <Widget>[
             Align(
+              alignment: const Alignment(2, -.6),
+              child: Opacity(
+                opacity: _isLoading ? 0 : 1,
+                child: WidgetConstructor.createText(
+                    "Please choose the best Migraine Area that represents yours",
+                    fontColor: Colors.white54,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Align(
               alignment: const Alignment(0.15, .8),
               child: Opacity(
                 opacity: _isLoading ? 0 : 1,
-                child: WidgetConstructor.createText(currentMigraineType),
+                child: WidgetConstructor.createText(currentMigraineType,
+                    align: TextAlign.center),
               ),
             ),
             Align(
@@ -485,22 +592,25 @@ class MigraineSelector extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             proxy.init(),
-            _isLoading
-                ? TemplatePage(
-                    body: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          WidgetConstructor.createText("Generating 3D Models"),
-                          WidgetConstructor.createText("Please Wait..."),
-                          const SizedBox(height: 30),
-                          const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 10,
-                          )
-                        ]),
-                    title: "",
-                    buttons: const [])
-                : Container(),
+            IgnorePointer(
+              ignoring: !_isLoading,
+              child: _isLoading
+                  ? TemplatePage(
+                      body: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            WidgetConstructor.createText(
+                                "Generating 3D Models"),
+                            WidgetConstructor.createText("Please Wait..."),
+                            const SizedBox(height: 30),
+                            const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 10,
+                            )
+                          ]),
+                      buttons: const [])
+                  : Container(),
+            ),
           ],
         ),
       );
@@ -534,48 +644,123 @@ class MigraineSelector extends StatelessWidget {
   }
 }
 
-class MedicalPage extends Page with LogHandler {
-  MedicalPage(NavigationController controller) {
+class MedicationPage extends Page with LogHandler {
+  MedicationPage(NavigationController controller) {
     createQuestions();
     Widget medicationText = WidgetConstructor.createText(
         "Enter any medication you take daily or on a need-to basis. Optional dosage and frequency fields available after selecting medicine");
-    BodyWidget medicationSearch = WidgetConstructor.createMedicationWidget();
-    bodyWidgets = [medicationSearch];
+    // BodyWidget medicationSearch = WidgetConstructor.createMedicationWidget();
+    // bodyWidgets = [medicationSearch];
     Map<Widget?, double> spacingConfig = {
       medicationText: 30,
-      medicationSearch: 30,
+      // medicationSearch: 30,
     };
     List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
     Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
         backLogic: controller.previousPage, title: "Medications");
-    template = TemplatePage(
-        body: finalBody,
-        title: "Na",
-        buttons: [WidgetConstructor.createButton(controller.nextPage)]);
+    template = TemplatePage(body: finalBody, buttons: [
+      WidgetConstructor.createButton(() {
+        // setResponses();
+        controller.nextPage();
+      })
+    ]);
   }
 
   void createQuestions() {
-    questions.add(
-        QuestionResponse(UserInputType.text, "Medications", "medications"));
+    questions.add(QuestionResponse(
+        UserInputType.text, "Medications Used", "medicationsUsed"));
+    setQuestions(questions);
+  }
+}
+
+class MedicalHistoryPage extends Page with LogHandler {
+  MedicalHistoryPage(NavigationController controller) {
+    createQuestions();
+    Widget medicationText = WidgetConstructor.createText(
+        "Please record any history of medical problems");
+    // BodyWidget medicationSearch = WidgetConstructor.createMedicationWidget();
+    // bodyWidgets = [medicationSearch];
+    Map<Widget?, double> spacingConfig = {
+      medicationText: 30,
+      // medicationSearch: 30,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage, title: "Medications");
+    template = TemplatePage(body: finalBody, buttons: [
+      WidgetConstructor.createButton(() {
+        // setResponses();
+        controller.nextPage();
+      })
+    ]);
+  }
+
+  void createQuestions() {
+    questions.add(QuestionResponse(
+        UserInputType.text, "Medical History Problems", "medicalProblems"));
+    setQuestions(questions);
+  }
+}
+
+class MenstruationInformation extends Page with LogHandler {
+  MenstruationInformation(NavigationController controller) {
+    createQuestions();
+    Widget dateText =
+        WidgetConstructor.createText("When did your last menstrual cycle end?");
+    BodyWidget dateSelector = WidgetConstructor.createDatePicker();
+    Widget lengthText = WidgetConstructor.createText(
+        "Approximately, how long did your last cycle last?");
+    BodyWidget lengthDropdown = WidgetConstructor.createDropDown([
+      "Less than 21 days",
+      "21-28 days (Average)",
+      "29-35 days",
+      "36-42 days",
+      "More than 42 days",
+      "My cycle length varies significantly and is not consistent",
+    ]);
+
+    bodyWidgets = [dateSelector, lengthDropdown];
+    Map<Widget?, double> spacingConfig = {
+      dateText: 30,
+      dateSelector: 0,
+      lengthText: 30,
+      lengthDropdown: 0,
+    };
+    List<Widget> spacedList = WidgetConstructor.addSpacing(spacingConfig);
+    Widget finalBody = WidgetConstructor.addUXWrap(spacedList,
+        backLogic: controller.previousPage, title: "Menstruation Questions");
+    template = TemplatePage(body: finalBody, buttons: [
+      WidgetConstructor.createButton(() {
+        setResponses();
+        controller.nextPage();
+      })
+    ]);
+  }
+
+  void createQuestions() {
+    questions.add(QuestionResponse(
+        UserInputType.text, "Menstruation Cycle End", "menstruationCycleEnd"));
+    questions.add(QuestionResponse(UserInputType.text,
+        "Menstruation Cycle Length", "menstruationCycleLength"));
     setQuestions(questions);
   }
 }
 
 class ConfirmationPage extends Page {
-  List<String> responses = [];
+  List<String> stats;
 
-  ConfirmationPage(NavigationController controller) {
+  ConfirmationPage(NavigationController controller, {this.stats = const []}) {
     Widget confirmationText = WidgetConstructor.createText(
         "Here is a list of your responses, would you like to edit?");
-
+    print(stats.toString());
     Widget compiledQuestionList = Container(
-      height: 500, // Set height as required
+      height: 400, // Set height as required
       child: ListView.builder(
-        itemCount: responses.length,
+        itemCount: stats.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text('\t${responses[index]}'),
+            child: Text('\t${stats[index]}'),
           );
         },
       ),
@@ -593,8 +778,6 @@ class ConfirmationPage extends Page {
 
     template = TemplatePage(
         body: finalBody,
-        title: "Na",
         buttons: [WidgetConstructor.createButton(controller.nextPage)]);
   }
-  
 }
